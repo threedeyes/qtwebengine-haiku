@@ -130,7 +130,7 @@ bool MallocDumpProvider::OnMemoryDump(const MemoryDumpArgs& args,
     allocated_objects_size = main_heap_info.allocated_size;
     allocated_objects_count = main_heap_info.block_count;
   }
-#elif defined(OS_FUCHSIA)
+#elif defined(OS_FUCHSIA) || defined(OS_HAIKU)
 // TODO(fuchsia): Port, see https://crbug.com/706592.
 #else
   struct mallinfo info = mallinfo();

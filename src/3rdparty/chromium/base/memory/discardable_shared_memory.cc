@@ -41,6 +41,11 @@
 #include "base/fuchsia/fuchsia_logging.h"
 #endif
 
+#if defined(OS_HAIKU)
+#define madvise posix_madvise
+#define MADV_DONTNEED POSIX_MADV_DONTNEED
+#endif
+
 namespace base {
 namespace {
 
@@ -403,6 +408,8 @@ bool DiscardableSharedMemory::Purge(Time current_time) {
 // reusable bit, which allows both Activity Monitor and memory-infra to
 // correctly track the pages.
 #define MADV_PURGE_ARGUMENT MADV_FREE_REUSABLE
+#elif defined(OS_HAIKU)
+#define MADV_PURGE_ARGUMENT POSIX_MADV_DONTNEED
 #else
 #define MADV_PURGE_ARGUMENT MADV_FREE
 #endif

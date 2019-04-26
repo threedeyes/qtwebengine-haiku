@@ -598,7 +598,7 @@ test("headless_unittests") {
     "//testing/gtest",
   ]
 
-  if (!is_fuchsia) {
+  if (!is_fuchsia && !is_haiku) {
     deps += [ "//components/crash/content/browser" ]
   }
 
@@ -682,7 +682,7 @@ test("headless_browsertests") {
     "//ui/base/clipboard",
   ]
 
-  if (!is_fuchsia) {
+  if (!is_fuchsia && !is_haiku) {
     deps += [ "//components/crash/content/browser" ]
   }
 

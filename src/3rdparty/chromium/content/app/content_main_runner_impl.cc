@@ -469,7 +469,9 @@ int RunZygote(ContentMainDelegate* delegate) {
 
   std::vector<std::unique_ptr<service_manager::ZygoteForkDelegate>>
       zygote_fork_delegates;
+#if defined(OS_LINUX)
   delegate->ZygoteStarting(&zygote_fork_delegates);
+#endif
   media::InitializeMediaLibrary();
 
 #if defined(OS_LINUX)
@@ -481,7 +483,9 @@ int RunZygote(ContentMainDelegate* delegate) {
     return 1;
   }
 
+#if defined(OS_LINUX)
   delegate->ZygoteForked();
+#endif
 
   // Zygote::HandleForkRequest may have reallocated the command
   // line so update it here with the new version.

@@ -272,7 +272,8 @@ BASE_EXPORT void IncreaseFdLimitTo(unsigned int max_descriptors);
 #endif  // defined(OS_POSIX)
 
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
-    defined(OS_ANDROID) || defined(OS_AIX) || defined(OS_FUCHSIA)
+    defined(OS_ANDROID) || defined(OS_AIX) || defined(OS_FUCHSIA) || \
+    defined(OS_HAIKU)
 // Data about system-wide memory consumption. Values are in KB. Available on
 // Windows, Mac, Linux, Android and Chrome OS.
 //
@@ -320,7 +321,7 @@ struct BASE_EXPORT SystemMemoryInfoKB {
 #endif
 
 #if defined(OS_ANDROID) || defined(OS_LINUX) || defined(OS_AIX) || \
-    defined(OS_FUCHSIA)
+    defined(OS_FUCHSIA) || defined(OS_HAIKU)
   int buffers = 0;
   int cached = 0;
   int active_anon = 0;
@@ -330,7 +331,7 @@ struct BASE_EXPORT SystemMemoryInfoKB {
   int dirty = 0;
   int reclaimable = 0;
 #endif  // defined(OS_ANDROID) || defined(OS_LINUX) || defined(OS_AIX) ||
-        // defined(OS_FUCHSIA)
+        // defined(OS_FUCHSIA) || defined(OS_HAIKU)
 
 #if defined(OS_CHROMEOS)
   int shmem = 0;
@@ -356,7 +357,8 @@ struct BASE_EXPORT SystemMemoryInfoKB {
 BASE_EXPORT bool GetSystemMemoryInfo(SystemMemoryInfoKB* meminfo);
 
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) ||
-        // defined(OS_ANDROID) || defined(OS_AIX) || defined(OS_FUCHSIA)
+        // defined(OS_ANDROID) || defined(OS_AIX) || defined(OS_FUCHSIA) ||
+        // defined(OS_HAIKU)
 
 #if defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_AIX)
 // Parse the data found in /proc/<pid>/stat and return the sum of the

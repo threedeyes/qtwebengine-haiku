@@ -160,7 +160,7 @@ config("common_inherited_config") {
       target_gen_dir,
     ]
   }
-  if (is_posix || is_fuchsia) {
+  if (is_posix || is_fuchsia || is_haiku) {
     defines += [ "WEBRTC_POSIX" ]
   }
   if (is_ios) {
@@ -177,6 +177,9 @@ config("common_inherited_config") {
   }
   if (is_fuchsia) {
     defines += [ "WEBRTC_FUCHSIA" ]
+  }
+  if (is_haiku) {
+    defines += [ "WEBRTC_HAIKU", "_BSD_SOURCE" ]
   }
   if (is_win) {
     defines += [ "WEBRTC_WIN" ]

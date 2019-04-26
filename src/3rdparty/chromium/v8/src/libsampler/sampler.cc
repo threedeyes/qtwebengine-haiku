@@ -12,7 +12,7 @@
 #include <sys/time.h>
 #include <atomic>
 
-#if !V8_OS_QNX && !V8_OS_AIX
+#if !V8_OS_QNX && !V8_OS_AIX && !V8_OS_HAIKU
 #include <sys/syscall.h>  // NOLINT
 #endif
 
@@ -20,7 +20,7 @@
 #include <mach/mach.h>
 // OpenBSD doesn't have <ucontext.h>. ucontext_t lives in <signal.h>
 // and is a typedef for struct sigcontext. There is no uc_mcontext.
-#elif !V8_OS_OPENBSD
+#elif !V8_OS_OPENBSD && !V8_OS_HAIKU
 #include <ucontext.h>
 #endif
 
@@ -522,7 +522,21 @@ void SignalHandler::FillRegisterState(void* context, RegisterState* state) {
   state->sp = reinterpret_cast<void*>(mcontext.jmp_context.gpr[1]);
   state->fp = reinterpret_cast<void*>(mcontext.jmp_context.gpr[31]);
   state->lr = reinterpret_cast<void*>(mcontext.jmp_context.lr);
-#endif  // V8_OS_AIX
+#elif V8_OS_HAIKU
+#if V8_HOST_ARCH_IA32
+  state->pc = reinterpret_cast<void*>(mcontext.eip);
+  state->sp = reinterpret_cast<void*>(mcontext.esp);
+  state->fp = reinterpret_cast<void*>(mcontext.ebp);
+#elif V8_HOST_ARCH_X64
+  state->pc = reinterpret_cast<void*>(mcontext.rip);
+  state->sp = reinterpret_cast<void*>(mcontext.rsp);
+  state->fp = reinterpret_cast<void*>(mcontext.rbp);
+#elif V8_HOST_ARCH_ARM
+  state->pc = reinterpret_cast<void*>(mcontext.r15);
+  state->sp = reinterpret_cast<void*>(mcontext.r13);
+  state->fp = reinterpret_cast<void*>(mcontext.r11);
+#endif  // V8_HOST_ARCH_*
+#endif  // V8_OS_HAIKU
 }
 
 #endif  // USE_SIGNALS

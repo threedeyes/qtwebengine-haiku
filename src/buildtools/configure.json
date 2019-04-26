@@ -485,7 +485,6 @@
         },
         "webengine-system-gn": {
             "label": "Use System Gn",
-            "autoDetect": "false",
             "condition": "tests.webengine-gn",
             "output": [ "privateFeature" ]
         },

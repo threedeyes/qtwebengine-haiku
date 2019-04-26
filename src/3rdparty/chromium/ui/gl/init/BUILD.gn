@@ -71,5 +71,14 @@ jumbo_component("init") {
     ]
 
     deps += [ "//ui/ozone" ]
+  } else if (is_haiku) {
+    sources += [
+      "gl_factory_haiku.cc",
+      "gl_initializer_haiku.cc",
+    ]
+    deps += [
+      "//ui/gl:gl_features",
+    ]
+    libs = [ "GL" ]
   }
 }

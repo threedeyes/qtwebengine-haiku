@@ -14,7 +14,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <sys/resource.h>
+#if !defined(OS_HAIKU)
 #include <sys/syscall.h>
+#endif
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -221,7 +223,7 @@ static const char kFDDir[] = "/proc/self/fd";
 void CloseSuperfluousFds(const base::InjectiveMultimap& saved_mapping) {
   // DANGER: no calls to malloc or locks are allowed from now on:
   // http://crbug.com/36678
-
+#if !defined(OS_HAIKU)
   // Get the maximum number of FDs possible.
   size_t max_fds = GetMaxFds();
 
@@ -276,6 +278,7 @@ void CloseSuperfluousFds(const base::InjectiveMultimap& saved_mapping) {
     int ret = IGNORE_EINTR(close(fd));
     DPCHECK(ret == 0);
   }
+  #endif
 }
 
 Process LaunchProcess(const CommandLine& cmdline,

@@ -1674,6 +1674,22 @@ jumbo_component("base") {
     public_deps += [ "//third_party/boringssl" ]
   }
 
+  if (is_haiku) {
+    sources -= [ "process/memory.cc" ]
+    sources += [
+      "base_paths_haiku.cc",
+      "base_paths_haiku.h",
+      "process/memory_stubs.cc",
+      "process/process_handle_haiku.cc",
+      "process/process_iterator_haiku.cc",
+      "process/process_metrics_haiku.cc",
+      "threading/platform_thread_haiku.cc",
+      "sys_info_haiku.cc"
+    ]
+
+    defines += [ "_BSD_SOURCE", "__USE_XOPEN2K8" ]
+  }
+
   # NaCl.
   if (is_nacl) {
     # Explicitly include the linux file.

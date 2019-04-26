@@ -61,7 +61,7 @@
 #include <sys/resource.h>
 #endif
 
-#if !defined(_AIX) && !defined(V8_OS_FUCHSIA)
+#if !defined(_AIX) && !defined(V8_OS_FUCHSIA) && !defined(V8_OS_HAIKU)
 #include <sys/syscall.h>
 #endif
 
@@ -75,6 +75,11 @@ extern "C" int madvise(caddr_t, size_t, int);
 #else
 extern int madvise(caddr_t, size_t, int);
 #endif
+#endif
+
+#if defined(V8_OS_HAIKU)
+#define madvise posix_madvise
+#define MADV_DONTNEED POSIX_MADV_DONTNEED
 #endif
 
 #ifndef MADV_FREE
@@ -134,7 +139,7 @@ int GetProtectionFromMemoryPermission(OS::MemoryPermission access) {
 int GetFlagsForMemoryPermission(OS::MemoryPermission access) {
   int flags = MAP_PRIVATE | MAP_ANONYMOUS;
   if (access == OS::MemoryPermission::kNoAccess) {
-#if !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX
+#if !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX && !V8_OS_HAIKU
     flags |= MAP_NORESERVE;
 #endif  // !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX
 #if V8_OS_QNX

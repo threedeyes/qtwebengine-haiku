@@ -13,6 +13,8 @@
 #include <stddef.h>
 #include <windows.h>
 #include <winnt.h>
+#elif defined(OS_HAIKU)
+#include <OS.h>
 #elif defined(__GLIBC__)
 extern "C" void* __libc_stack_end;  // NOLINT
 #endif
@@ -87,7 +89,7 @@ size_t GetUnderestimatedStackSize() {
 #endif
   }
   return pthread_get_stacksize_np(pthread_self());
-#elif defined(OS_WIN) && defined(COMPILER_MSVC)
+#elif defined(OS_HAIKU) || defined(OS_WIN) && defined(COMPILER_MSVC)
 return Threading::ThreadStackSize();
 #else
 #error "Stack frame size estimation not supported on this platform."
@@ -145,6 +147,10 @@ void* GetStackStart() {
   ::GetCurrentThreadStackLimits(&lowLimit, &highLimit);
   return reinterpret_cast<void*>(highLimit);
 #endif
+#elif defined(OS_HAIKU)
+  thread_info threadInfo;
+  get_thread_info(find_thread(NULL), &threadInfo);
+  return threadInfo.stack_base;
 #else
 #error Unsupported getStackStart on this platform.
 #endif
@@ -206,6 +212,17 @@ size_t ThreadStackSize() {
   // explains the details.
   CHECK_GT(thread_stack_size, 4u * 0x1000);
   thread_stack_size -= 4 * 0x1000;
+  return thread_stack_size;
+}
+#elif defined(OS_HAIKU)
+size_t ThreadStackSize() {
+  thread_info threadInfo;
+  get_thread_info(find_thread(NULL), &threadInfo);
+  uint8_t* stack_end = reinterpret_cast<uint8_t*>(threadInfo.stack_end);
+  uint8_t* stack_start = reinterpret_cast<uint8_t*>(threadInfo.stack_base);
+  CHECK(stack_start);
+  CHECK_GT(stack_start, stack_end);
+  size_t thread_stack_size = static_cast<size_t>(stack_start - stack_end);
   return thread_stack_size;
 }
 #endif

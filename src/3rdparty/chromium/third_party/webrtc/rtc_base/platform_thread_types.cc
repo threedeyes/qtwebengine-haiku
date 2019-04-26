@@ -13,6 +13,8 @@
 #if defined(WEBRTC_LINUX)
 #include <sys/prctl.h>
 #include <sys/syscall.h>
+#elif defined(WEBRTC_HAIKU)
+#include <OS.h>
 #endif
 
 namespace rtc {
@@ -27,6 +29,8 @@ PlatformThreadId CurrentThreadId() {
   return gettid();
 #elif defined(WEBRTC_FUCHSIA)
   return zx_thread_self();
+#elif defined(WEBRTC_HAIKU)
+  return find_thread(NULL);
 #elif defined(WEBRTC_LINUX)
   return syscall(__NR_gettid);
 #elif defined(__EMSCRIPTEN__)
@@ -81,6 +85,8 @@ void SetCurrentThreadName(const char* name) {
   prctl(PR_SET_NAME, reinterpret_cast<unsigned long>(name));  // NOLINT
 #elif defined(WEBRTC_MAC) || defined(WEBRTC_IOS)
   pthread_setname_np(name);
+#elif defined(WEBRTC_HAIKU)
+  rename_thread(find_thread(NULL), name);
 #endif
 }
 

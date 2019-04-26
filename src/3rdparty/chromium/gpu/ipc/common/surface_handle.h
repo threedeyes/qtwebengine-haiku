@@ -11,7 +11,7 @@
 
 #if (defined(OS_MACOSX) || defined(OS_WIN) || defined(USE_X11) || \
      defined(USE_OZONE)) &&                                       \
-    !defined(OS_NACL)
+    !defined(OS_NACL) && !defined(OS_HAIKU)
 #include "ui/gfx/native_widget_types.h"
 #define GPU_SURFACE_HANDLE_IS_ACCELERATED_WINDOW
 #endif
@@ -33,7 +33,8 @@ namespace gpu {
 #if defined(GPU_SURFACE_HANDLE_IS_ACCELERATED_WINDOW)
 using SurfaceHandle = gfx::AcceleratedWidget;
 constexpr SurfaceHandle kNullSurfaceHandle = gfx::kNullAcceleratedWidget;
-#elif defined(OS_ANDROID) || defined(OS_NACL) || defined(OS_FUCHSIA)
+#elif defined(OS_ANDROID) || defined(OS_NACL) || defined(OS_FUCHSIA) || \
+    defined(OS_HAIKU)
 using SurfaceHandle = int32_t;
 constexpr SurfaceHandle kNullSurfaceHandle = 0;
 #else

@@ -485,9 +485,11 @@ class Node(object):
         value = target_platform == 'ios'
       elif name == 'is_bsd':
         value = 'bsd' in target_platform
+      elif name == 'is_haiku':
+        value = target_platform.startswith('haiku')
       elif name == 'is_posix':
         value = (target_platform in ('darwin', 'linux2', 'linux3', 'sunos5',
-                                     'android', 'ios')
+                                     'android', 'ios', 'haiku1')
                  or 'bsd' in target_platform)
 
       elif name == 'pp_ifdef':

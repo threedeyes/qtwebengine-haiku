@@ -134,10 +134,10 @@ declare_args() {
   is_desktop_linux = current_os == "linux"
 
   # Set to true when compiling with the Clang compiler.
-  is_clang = current_os != "linux" ||
+  is_clang = current_os != "haiku" && (current_os != "linux" ||
              (current_cpu != "s390x" && current_cpu != "s390" &&
               current_cpu != "ppc64" && current_cpu != "ppc" &&
-              current_cpu != "mips" && current_cpu != "mips64")
+              current_cpu != "mips" && current_cpu != "mips64"))
 
   # Allows the path to a custom target toolchain to be injected as a single
   # argument, and set as the default toolchain.
@@ -218,6 +218,8 @@ if (host_toolchain == "") {
     }
   } else if (host_os == "aix") {
     host_toolchain = "//build/toolchain/aix:$host_cpu"
+  } else if (host_os == "haiku") {
+    host_toolchain = "//build/toolchain/haiku:$host_cpu"
   } else {
     assert(false, "Unsupported host_os: $host_os")
   }
@@ -236,6 +238,8 @@ if (target_os == "android") {
   } else {
     _default_toolchain = "//build/toolchain/linux:$target_cpu"
   }
+} else if (target_os == "haiku") {
+  _default_toolchain = "//build/toolchain/haiku:$target_cpu"
 } else if (target_os == "fuchsia") {
   _default_toolchain = "//build/toolchain/fuchsia:$target_cpu"
 } else if (target_os == "ios") {
@@ -297,6 +301,7 @@ is_linux = current_os == "chromeos" || current_os == "linux"
 is_mac = current_os == "mac"
 is_nacl = current_os == "nacl"
 is_win = current_os == "win" || current_os == "winuwp"
+is_haiku = current_os == "haiku"
 
 is_posix = !is_win && !is_fuchsia
 
@@ -385,6 +390,15 @@ if (!is_chromeos) {
     "*_chromeos_unittest.h",
     "*_chromeos_unittest.cc",
     "*\bchromeos/*",
+  ]
+}
+if (!is_haiku) {
+  sources_assignment_filter += [
+    "*_haiku.h",
+    "*_haiku.cc",
+    "*_haiku_unittest.h",
+    "*_haiku_unittest.cc",
+    "*\bhaiku/*",
   ]
 }
 

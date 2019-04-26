@@ -78,6 +78,13 @@ static_library("bundled_libevent") {
       "nacl_nonsfi/signal_stub.c",
     ]
     include_dirs = [ "nacl_nonsfi" ]
+  } else if (is_haiku) {
+    sources += [
+      "haiku/config.h",
+      "haiku/event-config.h",
+    ]
+    include_dirs = [ "haiku", "compat" ]
+    libs = [ "network" ]
   }
 
   configs -= [ "//build/config/compiler:chromium_code" ]

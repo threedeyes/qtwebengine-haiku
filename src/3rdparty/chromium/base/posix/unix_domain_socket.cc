@@ -56,7 +56,7 @@ bool CreateSocketPair(ScopedFD* one, ScopedFD* two) {
 
 // static
 bool UnixDomainSocket::EnableReceiveProcessId(int fd) {
-#if !defined(OS_MACOSX)
+#if !defined(OS_MACOSX) && !defined(OS_HAIKU)
   const int enable = 1;
   return setsockopt(fd, SOL_SOCKET, SO_PASSCRED, &enable, sizeof(enable)) == 0;
 #else
@@ -147,11 +147,11 @@ ssize_t UnixDomainSocket::RecvMsgWithFlags(int fd,
 
   const size_t kControlBufferSize =
       CMSG_SPACE(sizeof(int) * kMaxFileDescriptors)
-#if !defined(OS_NACL_NONSFI) && !defined(OS_MACOSX)
+#if !defined(OS_NACL_NONSFI) && !defined(OS_MACOSX) && !defined(OS_HAIKU)
       // The PNaCl toolchain for Non-SFI binary build and macOS do not support
       // ucred. macOS supports xucred, but this structure is insufficient.
       + CMSG_SPACE(sizeof(struct ucred))
-#endif  // OS_NACL_NONSFI or OS_MACOSX
+#endif  // OS_NACL_NONSFI or OS_MACOSX or OS_HAIKU
       ;
   char control_buffer[kControlBufferSize];
   msg.msg_control = control_buffer;
@@ -175,7 +175,7 @@ ssize_t UnixDomainSocket::RecvMsgWithFlags(int fd,
         wire_fds = reinterpret_cast<int*>(CMSG_DATA(cmsg));
         wire_fds_len = payload_len / sizeof(int);
       }
-#if !defined(OS_NACL_NONSFI) && !defined(OS_MACOSX)
+#if !defined(OS_NACL_NONSFI) && !defined(OS_MACOSX) && !defined(OS_HAIKU)
       // The PNaCl toolchain for Non-SFI binary build and macOS do not support
       // SCM_CREDENTIALS.
       if (cmsg->cmsg_level == SOL_SOCKET &&
@@ -184,7 +184,7 @@ ssize_t UnixDomainSocket::RecvMsgWithFlags(int fd,
         DCHECK_EQ(pid, -1);
         pid = reinterpret_cast<struct ucred*>(CMSG_DATA(cmsg))->pid;
       }
-#endif  // !defined(OS_NACL_NONSFI) && !defined(OS_MACOSX)
+#endif  // !defined(OS_NACL_NONSFI) && !defined(OS_MACOSX) && !defined(OS_HAIKU)
     }
   }
 

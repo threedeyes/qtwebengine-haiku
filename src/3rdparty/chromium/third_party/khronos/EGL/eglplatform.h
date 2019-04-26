@@ -99,6 +99,13 @@ typedef intptr_t EGLNativeDisplayType;
 typedef intptr_t EGLNativeWindowType;
 typedef intptr_t EGLNativePixmapType;
 
+#elif defined(__HAIKU__)
+
+#include <kernel/image.h>
+typedef void				*EGLNativeDisplayType;
+typedef uintptr_t			EGLNativePixmapType;
+typedef uintptr_t			EGLNativeWindowType;
+
 #elif defined(__unix__)
 
 /* X11 (tentative)  */

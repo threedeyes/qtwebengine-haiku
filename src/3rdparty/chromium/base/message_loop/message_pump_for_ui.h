@@ -44,7 +44,7 @@ using MessagePumpForUI = MessagePump;
 // TODO(abarth): Figure out if we need this.
 #elif defined(USE_GLIB)
 using MessagePumpForUI = MessagePumpGlib;
-#elif defined(OS_LINUX) || defined(OS_BSD)
+#elif defined(OS_LINUX) || defined(OS_BSD) || defined(OS_HAIKU)
 using MessagePumpForUI = MessagePumpLibevent;
 #elif defined(OS_FUCHSIA)
 using MessagePumpForUI = MessagePumpFuchsia;

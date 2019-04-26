@@ -192,6 +192,11 @@ typedef ui::WindowAndroid* NativeWindow;
 typedef base::android::ScopedJavaGlobalRef<jobject> NativeEvent;
 constexpr NativeView kNullNativeView = nullptr;
 constexpr NativeWindow kNullNativeWindow = nullptr;
+#elif defined(OS_HAIKU) // FIXME
+typedef void* NativeCursor;
+typedef void* NativeView;
+typedef void* NativeWindow;
+typedef void* NativeEvent;
 #else
 #error Unknown build environment.
 #endif
@@ -245,6 +250,9 @@ typedef uint64_t AcceleratedWidget;
 constexpr AcceleratedWidget kNullAcceleratedWidget = 0;
 #elif defined(OS_ANDROID)
 typedef ANativeWindow* AcceleratedWidget;
+constexpr AcceleratedWidget kNullAcceleratedWidget = 0;
+#elif defined(OS_HAIKU)
+typedef int32_t AcceleratedWidget;
 constexpr AcceleratedWidget kNullAcceleratedWidget = 0;
 #elif defined(USE_OZONE)
 typedef int32_t AcceleratedWidget;

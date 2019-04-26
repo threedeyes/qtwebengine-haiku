@@ -303,7 +303,7 @@ bool PlatformThread::CanIncreaseThreadPriority(ThreadPriority priority) {
 
 // static
 void PlatformThread::SetCurrentThreadPriorityImpl(ThreadPriority priority) {
-#if defined(OS_NACL)
+#if defined(OS_NACL) || defined(OS_HAIKU)
   NOTIMPLEMENTED();
 #else
   if (internal::SetCurrentThreadPriorityForPlatform(priority))
@@ -325,7 +325,7 @@ void PlatformThread::SetCurrentThreadPriorityImpl(ThreadPriority priority) {
 
 // static
 ThreadPriority PlatformThread::GetCurrentThreadPriority() {
-#if defined(OS_NACL)
+#if defined(OS_NACL) || defined(OS_HAIKU)
   NOTIMPLEMENTED();
   return ThreadPriority::NORMAL;
 #else

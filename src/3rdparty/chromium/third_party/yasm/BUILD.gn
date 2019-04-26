@@ -85,6 +85,9 @@ if (current_toolchain == host_toolchain) {
     if (is_posix || is_fuchsia) {
       cflags = [ "-std=gnu99" ]
     }
+    if (is_haiku) {
+      libs = [ "intl" ]
+    }
   }
 
   executable("genmacro") {

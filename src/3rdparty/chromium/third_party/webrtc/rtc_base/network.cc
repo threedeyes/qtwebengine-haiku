@@ -12,6 +12,10 @@
 
 #if defined(WEBRTC_POSIX)
 #include <net/if.h>
+#ifdef __HAIKU__
+#include <ifaddrs.h>
+#define IFF_RUNNING IFF_LINK
+#endif
 #endif  // WEBRTC_POSIX
 
 #if defined(WEBRTC_WIN)

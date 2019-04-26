@@ -34,7 +34,7 @@ if(macos|ios) {
     }
 }
 
-linux {
+if(linux|haiku) {
     !static {
         QMAKE_LFLAGS += @$${RSP_OBJECT_FILE}
         QMAKE_LFLAGS += -Wl,--start-group @$${RSP_ARCHIVE_FILE} -Wl,--end-group
