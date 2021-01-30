@@ -29,7 +29,11 @@
 #include <zircon/types.h>
 #else
 #include <pthread.h>
+#if !PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU)
 #include <sys/syscall.h>
+#else
+#include <OS.h>
+#endif
 #include <sys/types.h>
 #include <unistd.h>
 #endif
@@ -41,6 +45,11 @@ namespace base {
 using PlatformThreadId = pid_t;
 inline PlatformThreadId GetThreadId() {
   return gettid();
+}
+#elif PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU)
+using PlatformThreadId = thread_id;
+inline PlatformThreadId GetThreadId() {
+  return find_thread(NULL);
 }
 #elif PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX)
 using PlatformThreadId = pid_t;

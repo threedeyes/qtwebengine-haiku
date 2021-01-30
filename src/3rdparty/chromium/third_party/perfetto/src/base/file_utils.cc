@@ -89,7 +89,7 @@ ssize_t WriteAll(int fd, const void* buf, size_t count) {
 
 bool FlushFile(int fd) {
   PERFETTO_DCHECK(fd != 0);
-#if PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
+#if PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) && !PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU) || \
     PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)
   return !PERFETTO_EINTR(fdatasync(fd));
 #elif PERFETTO_BUILDFLAG(PERFETTO_OS_WIN)
