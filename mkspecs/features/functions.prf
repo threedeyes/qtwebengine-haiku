@@ -84,6 +84,10 @@ defineReplace(gnWebEngineArgs) {
         include($$QTWEBENGINE_ROOT/src/buildtools/config/windows.pri)
         include($$QTWEBENGINE_ROOT/src/core/config/windows.pri)
     }
+    haiku {
+        include($$QTWEBENGINE_ROOT/src/buildtools/config/haiku.pri)
+        include($$QTWEBENGINE_ROOT/src/core/config/haiku.pri)
+    }
     isEmpty(gn_args): error(No gn_args found please make sure you have valid configuration.)
     return($$gn_args)
 }
@@ -114,6 +118,7 @@ defineReplace(gnOS) {
     macos: return(mac)
     win32: return(win)
     linux: return(linux)
+    haiku: return(haiku)
     error(Unsupported platform)
     return(unknown)
 }
