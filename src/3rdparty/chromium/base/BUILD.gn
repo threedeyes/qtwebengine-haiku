@@ -59,7 +59,7 @@ declare_args() {
   # replacement base::Location::Current(). On by default in non-official builds
   # for testing purposes.
   # TODO(https://crbug.com/974061): remove this eventually.
-  from_here_uses_location_builtins = !is_official_build
+  from_here_uses_location_builtins = !is_official_build && !is_haiku
 
   # Unsafe developer build. Has developer-friendly features that may weaken or
   # disable security measures like sandboxing or ASLR.
@@ -929,13 +929,19 @@ jumbo_component("base") {
       "timer/hi_res_timer_manager_posix.cc",
     ]
 
-    if (!is_nacl && !is_mac && !is_ios) {
+    if (!is_nacl && !is_mac && !is_ios && !is_haiku) {
       sources += [
         "profiler/stack_copier_signal.cc",
         "profiler/stack_copier_signal.h",
         "profiler/stack_sampler_posix.cc",
         "profiler/thread_delegate_posix.cc",
         "profiler/thread_delegate_posix.h",
+      ]
+    }
+
+    if (is_haiku) {
+      sources += [
+        "profiler/stack_sampler_posix.cc",
       ]
     }
   }
@@ -1239,7 +1245,9 @@ jumbo_component("base") {
       "process/process_metrics_linux.cc",
       "threading/platform_thread_linux.cc",
     ]
-    jumbo_excluded_sources += [ "process/memory_linux.cc" ]
+    #jumbo_excluded_sources += [ "process/memory_linux.cc" ]
+    jumbo_excluded_sources += [ "metrics/histogram.cc" ]
+    jumbo_excluded_sources += [ "metrics/sparse_histogram.cc" ]
   }
 
   if (!is_nacl) {
@@ -1350,7 +1358,7 @@ jumbo_component("base") {
         "allocator/allocator_shim_override_glibc_weak_symbols.h",
       ]
       deps += [ "//base/allocator:tcmalloc" ]
-    } else if (is_linux && use_allocator == "none") {
+    } else if ((is_linux && !is_haiku) && use_allocator == "none") {
       sources += [ "allocator/allocator_shim_default_dispatch_to_glibc.cc" ]
     } else if (is_android && use_allocator == "none") {
       sources += [
@@ -1675,7 +1683,9 @@ jumbo_component("base") {
   }
 
   if (is_haiku) {
-    sources -= [ "process/memory.cc" ]
+    sources -= [ 
+      "process/memory.cc",
+    ]
     sources += [
       "base_paths_haiku.cc",
       "base_paths_haiku.h",

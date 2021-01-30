@@ -1936,7 +1936,7 @@ jumbo_static_library("browser") {
     deps += [ "//ui/events" ]
   }
 
-  if (is_linux) {
+  if (is_linux || is_haiku) {
     sources += [
       "font_service.cc",
       "font_service.h",
@@ -2002,6 +2002,9 @@ jumbo_static_library("browser") {
     # Fuchsia does not support DevTools front-end, so only only build DevTools
     # resources on other platforms.
     deps += [ "//content/browser/devtools:devtools_resources" ]
+  }
+  if (is_haiku) {
+    deps -= [ "//services/service_manager/zygote" ]
   }
 
   if (enable_basic_printing) {

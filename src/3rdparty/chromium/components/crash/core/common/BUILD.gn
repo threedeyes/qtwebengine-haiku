@@ -104,7 +104,9 @@ target(crash_key_target_type, "crash_key_lib") {
       ]
     }
 
-    deps += [ "//third_party/breakpad:client" ]
+    if (!is_haiku) {
+      deps += [ "//third_party/breakpad:client" ]
+    }
     if (use_combined_annotations) {
       public_deps += [ "//third_party/crashpad/crashpad/client" ]
     }
@@ -167,7 +169,7 @@ source_set("unit_tests") {
     sources += [ "objc_zombie_unittest.mm" ]
   }
 
-  if (!is_mac && !is_ios && !is_win && !is_fuchsia && !is_android) {
+  if (!is_mac && !is_ios && !is_win && !is_fuchsia && !is_android && !is_haiku) {
     include_dirs = [ "//third_party/breakpad/breakpad/src/" ]
     sources += [ "crash_key_breakpad_unittest.cc" ]
   }

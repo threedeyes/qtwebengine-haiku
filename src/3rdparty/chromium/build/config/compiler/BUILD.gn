@@ -480,7 +480,7 @@ config("compiler") {
     cflags += [ "-B$binutils_path" ]
   }
 
-  if (is_linux) {
+  if (is_linux && !is_haiku) {
     cflags += [ "-pthread" ]
     # Do not use the -pthread ldflag here since it becomes a no-op
     # when using -nodefaultlibs, which would cause an unused argument
