@@ -13,7 +13,7 @@ nasmlib_sources = [
   "asm/eval.c",
   "asm/exprdump.c",
   "asm/exprlib.c",
-  "asm/float.c",
+  "asm/floats.c",
   "asm/labels.c",
   "asm/listing.c",
   "asm/parser.c",

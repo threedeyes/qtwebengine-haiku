@@ -49,7 +49,7 @@
 #include "error.h"
 #include "saa.h"
 #include "raa.h"
-#include "float.h"
+#include "floats.h"
 #include "stdscan.h"
 #include "insns.h"
 #include "preproc.h"
