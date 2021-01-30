@@ -21,7 +21,12 @@
 #else
 #include <errno.h>
 #include <fcntl.h>
+#if !defined(OS_HAIKU)
 #include <sys/signal.h>
+#else
+#include <signal.h>
+#include <sys/select.h>
+#endif
 #include <sys/wait.h>
 #include <unistd.h>
 

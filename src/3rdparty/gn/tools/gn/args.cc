@@ -314,6 +314,8 @@ void Args::SetSystemVarsLocked(Scope* dest) const {
   os = "aix";
 #elif defined(OS_OPENBSD)
   os = "openbsd";
+#elif defined(OS_HAIKU)
+  os = "haiku";
 #else
 #error Unknown OS type.
 #endif

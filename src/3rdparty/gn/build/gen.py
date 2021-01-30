@@ -43,10 +43,12 @@ class Platform(object):
       self._platform = 'freebsd'
     elif self._platform.startswith('openbsd'):
       self._platform = 'openbsd'
+    elif self._platform.startswith('haiku'):
+      self._platform = 'haiku'
 
   @staticmethod
   def known_platforms():
-    return ['linux', 'darwin', 'msvc', 'aix', 'fuchsia', 'freebsd', 'openbsd']
+    return ['linux', 'darwin', 'msvc', 'aix', 'fuchsia', 'freebsd', 'openbsd', 'haiku']
 
   def platform(self):
     return self._platform
@@ -69,8 +71,11 @@ class Platform(object):
   def is_aix(self):
     return self._platform == 'aix'
 
+  def is_haiku(self):
+    return self._platform == 'haiku'
+
   def is_posix(self):
-    return self._platform in ['linux', 'freebsd', 'darwin', 'aix', 'openbsd']
+    return self._platform in ['linux', 'freebsd', 'darwin', 'aix', 'openbsd', 'haiku']
 
 
 def main(argv):
@@ -189,6 +194,7 @@ def WriteGenericNinja(path, static_libraries, executables,
       'freebsd': 'build_linux.ninja.template',
       'aix': 'build_aix.ninja.template',
       'openbsd': 'build_openbsd.ninja.template',
+      'haiku': 'build_linux.ninja.template',
   }[platform.platform()])
 
   with open(template_filename) as f:
@@ -350,13 +356,19 @@ def WriteGNNinja(path, platform, host, options):
     cflags.extend([
         '-D_FILE_OFFSET_BITS=64',
         '-D__STDC_CONSTANT_MACROS', '-D__STDC_FORMAT_MACROS',
-        '-pthread',
         '-pipe',
         '-fno-exceptions',
         '-fno-rtti',
         '-fdiagnostics-color',
     ])
-    cflags_cc.extend(['-std=c++14', '-Wno-c++11-narrowing'])
+    if not platform.is_haiku():
+	    cflags.extend([
+	        '-pthread',
+    ])
+
+    cflags_cc.extend(['-std=c++14'])
+    if not platform.is_haiku():
+	    cflags_cc.extend(['-Wno-c++11-narrowing'])
 
     if platform.is_linux():
       ldflags.append('-Wl,--as-needed')
@@ -374,7 +386,7 @@ def WriteGNNinja(path, platform, host, options):
       cflags_cc.append('-maix64')
       ldflags.append('-maix64')
 
-    if platform.is_posix():
+    if platform.is_posix() and not platform.is_haiku():
       ldflags.append('-pthread')
 
     if options.use_lto:
