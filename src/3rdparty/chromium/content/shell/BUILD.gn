@@ -90,7 +90,7 @@ static_library("content_shell_app") {
     "//content/public/app:both",
     "//v8",
   ]
-  if (!is_fuchsia) {
+  if (!is_fuchsia && !is_haiku) {
     deps += [
       "//components/crash/core/app",
       "//components/crash/core/app:test_support",
@@ -367,11 +367,10 @@ static_library("content_shell_lib") {
     deps += [ "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.ui.policy" ]
   }
   if (is_haiku) {
-    sources += [ "app/blink_test_platform_support_fuchsia.cc" ]
     deps -= [
-      "//components/crash/content/app",
-      "//components/crash/content/app:test_support",
       "//components/crash/content/browser",
+      "//components/crash/core/app",
+      "//components/crash/core/app:test_support",
     ]
   }
 
@@ -958,7 +957,7 @@ group("content_shell_crash_test") {
       mac_bin_path + "otool",
     ]
   }
-  if (is_posix) {
+  if (is_posix && !is_haiku) {
     data += [
       "//components/crash/content/tools/generate_breakpad_symbols.py",
       "//components/crash/content/tools/dmp2minidump.py",

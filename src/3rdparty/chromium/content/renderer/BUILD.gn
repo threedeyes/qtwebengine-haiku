@@ -464,8 +464,12 @@ target(link_target_type, "renderer") {
   if (is_linux) {
     deps += [
       "//components/services/font/public/cpp",
-      "//services/service_manager/zygote",
     ]
+    if (!is_haiku) {
+      deps += [
+        "//services/service_manager/zygote",
+      ]
+    }
   }
 
   if (is_mac) {
