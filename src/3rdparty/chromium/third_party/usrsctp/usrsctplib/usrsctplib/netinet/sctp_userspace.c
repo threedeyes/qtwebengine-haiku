@@ -40,8 +40,11 @@
 #include <pthread_np.h>
 #endif
 
-#if defined(__Userspace_os_Linux)
+#if defined(__Userspace_os_Linux) && !defined(__HAIKU__)
 #include <sys/prctl.h>
+#endif
+#if defined(__HAIKU__)
+#include <sys/sockio.h>
 #endif
 
 #if defined(__Userspace_os_Windows)
@@ -86,11 +89,14 @@ sctp_userspace_set_threadname(const char *name)
 #if defined(__Userspace_os_Darwin)
 	pthread_setname_np(name);
 #endif
-#if defined(__Userspace_os_Linux)
+#if defined(__Userspace_os_Linux) && !defined(__HAIKU__)
 	prctl(PR_SET_NAME, name);
 #endif
 #if defined(__Userspace_os_FreeBSD)
 	pthread_set_name_np(pthread_self(), name);
+#endif
+#if defined(__HAIKU__)
+	rename_thread(find_thread(NULL), name);
 #endif
 }
 

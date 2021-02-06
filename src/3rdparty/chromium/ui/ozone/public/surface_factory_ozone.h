@@ -27,6 +27,8 @@
 #include "gpu/vulkan/vulkan_implementation.h"
 #endif
 
+#include <vulkan/vulkan_core.h>
+
 namespace gfx {
 class NativePixmap;
 }

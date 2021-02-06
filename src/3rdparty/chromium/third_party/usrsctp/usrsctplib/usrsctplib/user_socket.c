@@ -627,6 +627,9 @@ copyiniov(struct iovec *iovp, u_int iovcnt, struct iovec **iov, int error)
 	u_int iovlen;
 
 	*iov = NULL;
+#ifndef UIO_MAXIOV
+#define UIO_MAXIOV IOV_MAX
+#endif
 	if (iovcnt > UIO_MAXIOV)
 		return (error);
 	iovlen = iovcnt * sizeof (struct iovec);
@@ -1068,7 +1071,7 @@ userspace_sctp_recvmsg(struct socket *so,
 	if (error) {
 		if ((auio.uio_resid != ulen) &&
 		    (error == EINTR ||
-#if !defined(__Userspace_os_NetBSD)
+#if !defined(__Userspace_os_NetBSD) && !defined(__HAIKU__)
 		     error == ERESTART ||
 #endif
 		     error == EWOULDBLOCK)) {
@@ -1161,7 +1164,7 @@ usrsctp_recvv(struct socket *so,
 	if (errno) {
 		if ((auio.uio_resid != ulen) &&
 		    (errno == EINTR ||
-#if !defined(__Userspace_os_NetBSD)
+#if !defined(__Userspace_os_NetBSD) && !defined(__HAIKU__)
 		     errno == ERESTART ||
 #endif
 		     errno == EWOULDBLOCK)) {
@@ -2117,7 +2120,7 @@ int user_connect(struct socket *so, struct sockaddr *sa)
 		error = pthread_cond_wait(SOCK_COND(so), SOCK_MTX(so));
 #endif
 		if (error) {
-#if defined(__Userspace_os_NetBSD)
+#if defined(__Userspace_os_NetBSD) || defined(__HAIKU__)
 			if (error == EINTR) {
 #else
 			if (error == EINTR || error == ERESTART) {
@@ -2137,7 +2140,7 @@ bad:
 	if (!interrupted) {
 		so->so_state &= ~SS_ISCONNECTING;
 	}
-#if !defined(__Userspace_os_NetBSD)
+#if !defined(__Userspace_os_NetBSD) && !defined(__HAIKU__)
 	if (error == ERESTART) {
 		error = EINTR;
 	}

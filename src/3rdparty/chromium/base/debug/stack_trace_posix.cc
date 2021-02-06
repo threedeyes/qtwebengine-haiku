@@ -27,7 +27,7 @@
 #if !defined(USE_SYMBOLIZE)
 #include <cxxabi.h>
 #endif
-#if !defined(__UCLIBC__) && !defined(_AIX) && !defined(OS_HAIKU) && !defined(OS_HAIKU)
+#if !defined(__UCLIBC__) && !defined(_AIX) && !defined(OS_HAIKU)
 #include <execinfo.h>
 #endif
 
@@ -35,7 +35,7 @@
 #include <AvailabilityMacros.h>
 #endif
 
-#if defined(OS_LINUX)
+#if defined(OS_LINUX) || defined(OS_HAIKU)
 #include "base/debug/proc_maps_linux.h"
 #endif
 

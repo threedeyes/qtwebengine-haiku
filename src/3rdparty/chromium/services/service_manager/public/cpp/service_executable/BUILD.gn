@@ -29,6 +29,12 @@ source_set("support") {
       "//sandbox/linux:seccomp_bpf",
     ]
   }
+  if (is_haiku) {
+    deps -= [
+      "//sandbox/linux:seccomp_bpf",
+    ]
+  }
+
 }
 
 source_set("switches") {

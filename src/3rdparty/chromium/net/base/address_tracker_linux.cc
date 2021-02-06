@@ -5,7 +5,9 @@
 #include "net/base/address_tracker_linux.h"
 
 #include <errno.h>
+#ifndef OS_HAIKU
 #include <linux/if.h>
+#endif
 #include <stdint.h>
 #include <sys/ioctl.h>
 #include <utility>
@@ -177,6 +179,7 @@ AddressTrackerLinux::AddressTrackerLinux(
 AddressTrackerLinux::~AddressTrackerLinux() = default;
 
 void AddressTrackerLinux::Init() {
+#if !defined(OS_HAIKU)
   netlink_fd_.reset(socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE));
   if (!netlink_fd_.is_valid()) {
     PLOG(ERROR) << "Could not create NETLINK socket";
@@ -261,6 +264,7 @@ void AddressTrackerLinux::Init() {
         base::BindRepeating(&AddressTrackerLinux::OnFileCanReadWithoutBlocking,
                             base::Unretained(this)));
   }
+#endif
 }
 
 void AddressTrackerLinux::AbortAndForceOnline() {
@@ -348,6 +352,7 @@ void AddressTrackerLinux::HandleMessage(const char* buffer,
                                         bool* address_changed,
                                         bool* link_changed,
                                         bool* tunnel_changed) {
+#if !defined(OS_HAIKU)
   DCHECK(buffer);
   // Note that NLMSG_NEXT decrements |length| to reflect the number of bytes
   // remaining in |buffer|.
@@ -460,6 +465,10 @@ void AddressTrackerLinux::HandleMessage(const char* buffer,
         break;
     }
   }
+#else
+	NOTIMPLEMENTED();
+	AbortAndForceOnline();
+#endif
 }
 
 void AddressTrackerLinux::OnFileCanReadWithoutBlocking() {
@@ -487,31 +496,7 @@ bool AddressTrackerLinux::IsTunnelInterfaceName(const char* name) {
 }
 
 void AddressTrackerLinux::UpdateCurrentConnectionType() {
-  AddressTrackerLinux::AddressMap address_map = GetAddressMap();
-  std::unordered_set<int> online_links = GetOnlineLinks();
-
-  // Strip out tunnel interfaces from online_links
-  for (auto it = online_links.cbegin(); it != online_links.cend();) {
-    if (IsTunnelInterface(*it)) {
-      it = online_links.erase(it);
-    } else {
-      ++it;
-    }
-  }
-
-  NetworkInterfaceList networks;
-  NetworkChangeNotifier::ConnectionType type =
-      NetworkChangeNotifier::CONNECTION_NONE;
-  if (GetNetworkListImpl(&networks, 0, online_links, address_map,
-                         get_interface_name_)) {
-    type = NetworkChangeNotifier::ConnectionTypeFromInterfaceList(networks);
-  } else {
-    type = online_links.empty() ? NetworkChangeNotifier::CONNECTION_NONE
-                                : NetworkChangeNotifier::CONNECTION_UNKNOWN;
-  }
-
-  AddressTrackerAutoLock lock(*this, connection_type_lock_);
-  current_connection_type_ = type;
+  NOTIMPLEMENTED();  
 }
 
 int AddressTrackerLinux::GetThreadsWaitingForConnectionTypeInitForTesting() {

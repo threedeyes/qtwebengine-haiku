@@ -43,6 +43,7 @@ SwapMetricsDriverImplLinux::~SwapMetricsDriverImplLinux() = default;
 
 SwapMetricsDriver::SwapMetricsUpdateResult
 SwapMetricsDriverImplLinux::UpdateMetricsInternal(base::TimeDelta interval) {
+#if !defined(OS_HAIKU)
   base::VmStatInfo vmstat;
   if (!base::GetVmStatInfo(&vmstat)) {
     return SwapMetricsDriver::SwapMetricsUpdateResult::kSwapMetricsUpdateFailed;
@@ -61,6 +62,9 @@ SwapMetricsDriverImplLinux::UpdateMetricsInternal(base::TimeDelta interval) {
   delegate_->OnSwapOutCount(out_counts, interval);
 
   return SwapMetricsDriver::SwapMetricsUpdateResult::kSwapMetricsUpdateSuccess;
+#else
+  return SwapMetricsDriver::SwapMetricsUpdateResult::kSwapMetricsUpdateFailed;
+#endif
 }
 
 }  // namespace content

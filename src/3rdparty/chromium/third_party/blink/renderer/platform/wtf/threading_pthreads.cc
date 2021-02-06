@@ -54,8 +54,13 @@
 #include <sys/syscall.h>
 #endif
 
-#if defined(OS_LINUX) || defined(OS_ANDROID)
+#if defined(OS_LINUX) || defined(OS_ANDROID) || defined(OS_HAIKU)
 #include <unistd.h>
+#endif
+
+#if defined(OS_HAIKU)
+#include <signal.h>
+#include <pthread.h>
 #endif
 
 namespace WTF {

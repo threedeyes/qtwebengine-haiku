@@ -30,6 +30,7 @@ void RendererMainPlatformDelegate::PlatformUninitialize() {
 }
 
 bool RendererMainPlatformDelegate::EnableSandbox() {
+#if !defined(OS_HAIKU)
   // The setuid sandbox is started in the zygote process: zygote_main_linux.cc
   // https://chromium.googlesource.com/chromium/src/+/master/docs/linux/suid_sandbox.md
   //
@@ -66,6 +67,7 @@ bool RendererMainPlatformDelegate::EnableSandbox() {
   }
 #endif  // __x86_64__
 
+#endif
   return true;
 }
 

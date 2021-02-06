@@ -173,6 +173,9 @@ jumbo_static_library("metrics") {
   if (is_fuchsia) {
     sources += [ "drive_metrics_provider_fuchsia.cc" ]
   }
+  if (is_haiku) {
+    sources -= [ "drive_metrics_provider_linux.cc" ]
+  }
 }
 
 if (is_android) {

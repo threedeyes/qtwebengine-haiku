@@ -33,12 +33,12 @@ namespace rtc {
 
 // Prefixes used for categorizing IPv6 addresses.
 static const in6_addr kV4MappedPrefix = {
-    {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0}}};
-static const in6_addr k6To4Prefix = {{{0x20, 0x02, 0}}};
-static const in6_addr kTeredoPrefix = {{{0x20, 0x01, 0x00, 0x00}}};
-static const in6_addr kV4CompatibilityPrefix = {{{0}}};
-static const in6_addr k6BonePrefix = {{{0x3f, 0xfe, 0}}};
-static const in6_addr kPrivateNetworkPrefix = {{{0xFD}}};
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0xFF, 0}};
+static const in6_addr k6To4Prefix = {{0x20, 0x02, 0}};
+static const in6_addr kTeredoPrefix = {{0x20, 0x01, 0x00, 0x00}};
+static const in6_addr kV4CompatibilityPrefix = {{0}};
+static const in6_addr k6BonePrefix = {{0x3f, 0xfe, 0}};
+static const in6_addr kPrivateNetworkPrefix = {{0xFD}};
 
 static bool IPIsHelper(const IPAddress& ip,
                        const in6_addr& tomatch,

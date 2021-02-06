@@ -268,6 +268,11 @@ jumbo_component("network_service") {
       "//services/service_manager/sandbox:sandbox",
     ]
   }
+  if (is_haiku) {
+    deps -= [
+      "//sandbox/linux:sandbox_services",
+    ]
+  }
 
   if (is_android) {
     deps += [

@@ -97,8 +97,9 @@ static const char kLibV4lEncPluginPath[] =
     "/usr/lib/libv4l/plugins/libv4l-encplugin.so";
 #endif
 
-constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE;
+constexpr int dlopen_flag = RTLD_NOW | RTLD_GLOBAL;
 
+#if !defined(OS_HAIKU)
 void AddV4L2GpuWhitelist(
     std::vector<BrokerFilePermission>* permissions,
     const service_manager::SandboxSeccompBPF::Options& options) {
@@ -333,8 +334,10 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
   AddStandardGpuWhiteList(&permissions);
   return permissions;
 }
+#endif
 
 void LoadArmGpuLibraries() {
+#if !defined(OS_HAIKU)
   // Preload the Mali library.
   if (UseChromecastSandboxWhitelist()) {
     for (const char* path : kWhitelistedChromecastPaths) {
@@ -349,6 +352,7 @@ void LoadArmGpuLibraries() {
     // Preload the Tegra V4L2 (video decode acceleration) library.
     dlopen(kLibTegraPath, dlopen_flag);
   }
+#endif
 }
 
 bool LoadAmdGpuLibraries() {
@@ -429,6 +433,8 @@ bool BrokerProcessPreSandboxHook(
 }  // namespace
 
 bool GpuProcessPreSandboxHook(service_manager::SandboxLinux::Options options) {
+  NOTIMPLEMENTED();
+#if !defined(OS_HAIKU)
   service_manager::SandboxLinux::GetInstance()->StartBrokerProcess(
       CommandSetForGPU(options), FilePermissionsForGpu(options),
       base::BindOnce(BrokerProcessPreSandboxHook), options);
@@ -440,6 +446,7 @@ bool GpuProcessPreSandboxHook(service_manager::SandboxLinux::Options options) {
 
   errno = 0;
   return true;
+#endif
 }
 
 }  // namespace content

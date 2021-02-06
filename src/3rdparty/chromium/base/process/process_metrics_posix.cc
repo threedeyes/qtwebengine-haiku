@@ -54,7 +54,7 @@ static const rlim_t kSystemDefaultMaxFds = 1024;
 #elif defined(OS_AIX)
 static const rlim_t kSystemDefaultMaxFds = 8192;
 #elif defined(OS_HAIKU)
-static const rlim_t kSystemDefaultMaxFds = 8192;
+static const rlim_t kSystemDefaultMaxFds = 4096;
 #endif
 
 size_t GetMaxFds() {

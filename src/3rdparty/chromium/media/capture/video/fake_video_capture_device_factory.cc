@@ -218,6 +218,8 @@ void FakeVideoCaptureDeviceFactory::GetDeviceDescriptors(
         VideoCaptureApi::ANDROID_API2_LEGACY
 #elif defined(OS_FUCHSIA)
         VideoCaptureApi::UNKNOWN
+#elif defined(OS_HAIKU)
+        VideoCaptureApi::UNKNOWN
 #endif
         );
     entry_index++;

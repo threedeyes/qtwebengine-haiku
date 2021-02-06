@@ -67,7 +67,7 @@ declare_args() {
       ozone_platform = "x11"
       ozone_platform_gbm = true
       ozone_platform_x11 = true
-    } else if (is_desktop_linux) {
+    } else if (is_desktop_linux && !is_haiku) {
       ozone_platform = "x11"
       ozone_platform_wayland = true
       ozone_platform_x11 = true

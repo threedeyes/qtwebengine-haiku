@@ -48,7 +48,7 @@ static_library("bundled_libevent") {
       "mac/event-config.h",
     ]
     include_dirs = [ "mac" ]
-  } else if (is_linux) {
+  } else if (is_linux && !is_haiku) {
     sources += [
       "epoll.c",
       "linux/config.h",

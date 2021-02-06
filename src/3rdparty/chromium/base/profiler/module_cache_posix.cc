@@ -6,6 +6,11 @@
 
 #include <dlfcn.h>
 #include <elf.h>
+#ifdef __HAIKU__
+#define PF_X		0x1
+#define PF_W		0x2
+#define PF_R		0x4
+#endif
 
 #include "base/debug/elf_reader.h"
 #include "build/build_config.h"

@@ -51,6 +51,12 @@
 #include "base/strings/utf_string_conversions.h"
 #endif  // defined(OS_ANDROID)
 
+#if defined(OS_HAIKU)
+#include <sys/sockio.h>
+#define IPV6_TCLASS 61
+#define IP_DEFAULT_MULTICAST_TTL 1
+#endif
+
 #if defined(OS_MACOSX) && !defined(OS_IOS)
 // This was needed to debug crbug.com/640281.
 // TODO(zhongyi): Remove once the bug is resolved.
@@ -70,7 +76,7 @@ const int kActivityMonitorMinimumSamplesForThroughputEstimate = 2;
 const base::TimeDelta kActivityMonitorMsThreshold =
     base::TimeDelta::FromMilliseconds(100);
 
-#if defined(OS_MACOSX)
+#if defined(OS_MACOSX)  || defined(OS_HAIKU)
 // When enabling multicast using setsockopt(IP_MULTICAST_IF) MacOS
 // requires passing IPv4 address instead of interface index. This function
 // resolves IPv4 address by interface index. The |address| is returned in
@@ -99,7 +105,7 @@ int GetIPv4AddressFromIndex(int socket, uint32_t index, uint32_t* address) {
   return OK;
 }
 
-#endif  // OS_MACOSX
+#endif  // OS_MACOSX || defined(OS_HAIKU)
 
 #if defined(OS_MACOSX) && !defined(OS_IOS)
 
@@ -653,13 +659,13 @@ int UDPSocketPosix::SetDoNotFragment() {
 }
 
 void UDPSocketPosix::SetMsgConfirm(bool confirm) {
-#if !defined(OS_MACOSX) && !defined(OS_IOS)
+#if !defined(OS_MACOSX) && !defined(OS_IOS) && !defined(OS_HAIKU)
   if (confirm) {
     sendto_flags_ |= MSG_CONFIRM;
   } else {
     sendto_flags_ &= ~MSG_CONFIRM;
   }
-#endif  // !defined(OS_MACOSX) && !defined(OS_IOS)
+#endif  // !defined(OS_MACOSX) && !defined(OS_IOS) && !defined(OS_HAIKU)
 }
 
 int UDPSocketPosix::AllowAddressReuse() {
@@ -944,17 +950,17 @@ int UDPSocketPosix::SetMulticastOptions() {
   if (multicast_interface_ != 0) {
     switch (addr_family_) {
       case AF_INET: {
-#if defined(OS_MACOSX)
+#if defined(OS_MACOSX) || defined(OS_HAIKU)
         ip_mreq mreq = {};
         int error = GetIPv4AddressFromIndex(socket_, multicast_interface_,
                                             &mreq.imr_interface.s_addr);
         if (error != OK)
           return error;
-#else   //  defined(OS_MACOSX)
+#else   //  defined(OS_MACOSX) || defined(OS_HAIKU)
         ip_mreqn mreq = {};
         mreq.imr_ifindex = multicast_interface_;
         mreq.imr_address.s_addr = htonl(INADDR_ANY);
-#endif  //  !defined(OS_MACOSX)
+#endif  //  !defined(OS_MACOSX) || defined(OS_HAIKU)
         int rv = setsockopt(socket_, IPPROTO_IP, IP_MULTICAST_IF,
                             reinterpret_cast<const char*>(&mreq), sizeof(mreq));
         if (rv)
@@ -1018,7 +1024,7 @@ int UDPSocketPosix::JoinGroup(const IPAddress& group_address) const {
       if (addr_family_ != AF_INET)
         return ERR_ADDRESS_INVALID;
 
-#if defined(OS_MACOSX)
+#if defined(OS_MACOSX) || defined(OS_HAIKU)
       ip_mreq mreq = {};
       int error = GetIPv4AddressFromIndex(socket_, multicast_interface_,
                                           &mreq.imr_interface.s_addr);
@@ -1066,9 +1072,18 @@ int UDPSocketPosix::LeaveGroup(const IPAddress& group_address) const {
     case IPAddress::kIPv4AddressSize: {
       if (addr_family_ != AF_INET)
         return ERR_ADDRESS_INVALID;
+
+#if defined(OS_MACOSX) || defined(OS_HAIKU)
+      ip_mreq mreq = {};
+      int error = GetIPv4AddressFromIndex(socket_, multicast_interface_,
+                                          &mreq.imr_interface.s_addr);
+      if (error != OK)
+        return error;
+#else
       ip_mreqn mreq = {};
       mreq.imr_ifindex = multicast_interface_;
       mreq.imr_address.s_addr = INADDR_ANY;
+#endif
       memcpy(&mreq.imr_multiaddr, group_address.bytes().data(),
              IPAddress::kIPv4AddressSize);
       int rv = setsockopt(socket_, IPPROTO_IP, IP_DROP_MEMBERSHIP,

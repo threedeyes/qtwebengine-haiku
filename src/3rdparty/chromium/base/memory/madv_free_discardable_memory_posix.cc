@@ -21,6 +21,9 @@
 #include "base/trace_event/memory_allocator_dump.h"
 #include "base/trace_event/memory_dump_manager.h"
 
+#define MADV_DONTNEED POSIX_MADV_DONTNEED
+#define madvise posix_madvise
+
 #if defined(ADDRESS_SANITIZER)
 #include <sanitizer/asan_interface.h>
 #endif  // defined(ADDRESS_SANITIZER)
@@ -292,6 +295,7 @@ bool MadvFreeDiscardableMemoryPosix::IsResident() const {
   std::vector<unsigned char> vec(allocated_pages_);
 #endif
 
+#if !defined(OS_HAIKU)
   int retval =
       mincore(data_, allocated_pages_ * base::GetPageSize(), vec.data());
   DPCHECK(retval == 0 || errno == EAGAIN);
@@ -300,6 +304,7 @@ bool MadvFreeDiscardableMemoryPosix::IsResident() const {
     if (!(vec[i] & 1))
       return false;
   }
+#endif
   return true;
 }
 

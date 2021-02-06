@@ -185,7 +185,9 @@
 
 RTC_EXPORT_TEMPLATE_TEST(DEFAULT, );  // NOLINT
 RTC_EXPORT_TEMPLATE_TEST(DEFAULT, __attribute__((visibility("default"))));
+#ifndef __HAIKU__
 RTC_EXPORT_TEMPLATE_TEST(MSVC_HACK, __declspec(dllexport));
+#endif
 RTC_EXPORT_TEMPLATE_TEST(DEFAULT, __declspec(dllimport));
 
 #undef RTC_EXPORT_TEMPLATE_TEST

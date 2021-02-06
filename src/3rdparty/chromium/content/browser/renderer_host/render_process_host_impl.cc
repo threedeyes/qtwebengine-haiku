@@ -240,7 +240,7 @@
 #include "content/browser/gpu/gpu_data_manager_impl.h"
 #endif
 
-#if defined(OS_LINUX)
+#if defined(OS_LINUX) || defined(OS_HAIKU)
 #include <sys/resource.h>
 #include <sys/time.h>
 
@@ -1204,7 +1204,7 @@ static constexpr size_t kUnknownPlatformProcessLimit = 0;
 // to indicate failure and std::numeric_limits<size_t>::max() to indicate
 // unlimited.
 size_t GetPlatformProcessLimit() {
-#if defined(OS_LINUX)
+#if defined(OS_LINUX) 
   struct rlimit limit;
   if (getrlimit(RLIMIT_NPROC, &limit) != 0)
     return kUnknownPlatformProcessLimit;
@@ -1303,7 +1303,7 @@ void RenderProcessHostImpl::IOThreadHostImpl::BindHostReceiver(mojo::GenericPend
       return;
   }
 
-#if defined(OS_LINUX)
+#if defined(OS_LINUX) || defined(OS_HAIKU)
   if (auto font_receiver = receiver.As<font_service::mojom::FontService>()) {
     ConnectToFontService(std::move(font_receiver));
     return;
@@ -1719,7 +1719,7 @@ bool RenderProcessHostImpl::Init() {
   renderer_prefix =
       browser_command_line.GetSwitchValueNative(switches::kRendererCmdPrefix);
 
-#if defined(OS_LINUX)
+#if defined(OS_LINUX) || defined(OS_HAIKU)
   int flags = renderer_prefix.empty() ? ChildProcessHost::CHILD_ALLOW_SELF
                                       : ChildProcessHost::CHILD_NORMAL;
 #elif defined(OS_MACOSX)

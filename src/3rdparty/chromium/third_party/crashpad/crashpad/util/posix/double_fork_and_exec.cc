@@ -24,6 +24,10 @@
 #include "base/strings/stringprintf.h"
 #include "util/posix/close_multiple.h"
 
+#if defined(OS_HAIKU)
+#define WCOREDUMP(x) WIFCORED(x)
+#endif
+
 namespace crashpad {
 
 bool DoubleForkAndExec(const std::vector<std::string>& argv,

@@ -12,12 +12,12 @@ if (is_android) {
 }
 
 declare_args() {
-  compile_suid_client = is_linux
+  compile_suid_client = is_linux && !is_haiku
 
-  compile_credentials = is_linux
+  compile_credentials = is_linux && !is_haiku
 
   # On Android, use plain GTest.
-  use_base_test_suite = is_linux
+  use_base_test_suite = is_linux && !is_haiku
 }
 
 if (is_nacl_nonsfi) {
@@ -370,14 +370,17 @@ component("sandbox_services") {
     public_deps += [ ":sandbox_services_headers" ]
   }
 
-  if (is_nacl_nonsfi) {
-    cflags = [ "-fgnu-inline-asm" ]
-
+  if (is_nacl_nonsfi || is_haiku) {
+    if (is_nacl_nonsfi) {
+      cflags = [ "-fgnu-inline-asm" ]
+    }
     sources -= [
       "services/init_process_reaper.cc",
       "services/init_process_reaper.h",
       "services/scoped_process.cc",
       "services/scoped_process.h",
+      "services/syscall_wrappers.cc",
+      "services/syscall_wrappers.h",
       "services/yama.cc",
       "services/yama.h",
       "syscall_broker/broker_channel.cc",
@@ -396,6 +399,10 @@ component("sandbox_services") {
       "syscall_broker/broker_process.h",
       "syscall_broker/broker_simple_message.cc",
       "syscall_broker/broker_simple_message.h",
+    ]
+    sources += [
+      "services/libc_interceptor.cc",
+      "services/libc_interceptor.h",
     ]
   } else if (!is_android) {
     sources += [

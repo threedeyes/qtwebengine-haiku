@@ -117,7 +117,7 @@
 #define HAVE_ACCESS 1
 
 /* Define to 1 if you have the `canonicalize_file_name' function. */
-#define HAVE_CANONICALIZE_FILE_NAME 1
+/*#undef HAVE_CANONICALIZE_FILE_NAME */
 
 /* Define to 1 if you have the `cpu_to_le16' intrinsic function. */
 /* #undef HAVE_CPU_TO_LE16 */
@@ -158,7 +158,7 @@
 
 /* Define to 1 if you have the declaration of `strsep', and to 0 if you don't.
    */
-#define HAVE_DECL_STRSEP 1
+#define HAVE_DECL_STRSEP 0
 
 /* Define to 1 if you have the <endian.h> header file. */
 #define HAVE_ENDIAN_H 1
@@ -310,7 +310,7 @@
 /* #undef HAVE_STRRCHRNUL */
 
 /* Define to 1 if you have the `strsep' function. */
-#define HAVE_STRSEP 1
+/* #undef HAVE_STRSEP */
 
 /* Define to 1 if the system has the type `struct stat'. */
 #define HAVE_STRUCT_STAT 1

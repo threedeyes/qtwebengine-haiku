@@ -536,7 +536,7 @@ jumbo_static_library("test_support") {
     deps += [ "//ui/platform_window/x11" ]
   }
 
-  if (use_ozone) {
+  if (use_ozone && !is_haiku) {
     deps += [ "//ui/ozone" ]
   }
 }

@@ -19,6 +19,11 @@
 extern "C" void* __libc_stack_end;  // NOLINT
 #endif
 
+#if defined(OS_HAIKU)
+#include <signal.h>
+#include <pthread.h>
+#endif
+
 namespace WTF {
 
 size_t GetUnderestimatedStackSize() {
@@ -90,7 +95,7 @@ size_t GetUnderestimatedStackSize() {
   }
   return pthread_get_stacksize_np(pthread_self());
 #elif defined(OS_HAIKU) || defined(OS_WIN) && defined(COMPILER_MSVC)
-return Threading::ThreadStackSize();
+return WTF::internal::ThreadStackSize();
 #else
 #error "Stack frame size estimation not supported on this platform."
   return 0;

@@ -135,6 +135,8 @@ jumbo_component("ozone_base") {
     "//ui/ozone/platform/*",
     "//ui/base/ime/chromeos/*",
   ]
+  
+  all_dependent_configs = [ "//third_party/vulkan:vulkan_config" ]
 
   # Out of tree platforms can depend on this.
   visibility += ozone_external_platform_visibility

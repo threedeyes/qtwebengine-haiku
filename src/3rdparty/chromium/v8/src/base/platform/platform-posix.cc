@@ -438,7 +438,7 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
 
 // static
 bool OS::HasLazyCommits() {
-#if V8_OS_AIX || V8_OS_LINUX || V8_OS_MACOSX
+#if V8_OS_AIX || V8_OS_LINUX || V8_OS_MACOSX || V8_OS_HAIKU
   return true;
 #else
   // TODO(bbudge) Return true for all POSIX platforms.
@@ -975,7 +975,7 @@ void Thread::SetThreadLocal(LocalStorageKey key, void* value) {
 // pthread_getattr_np used below is non portable (hence the _np suffix). We
 // keep this version in POSIX as most Linux-compatible derivatives will
 // support it. MacOS and FreeBSD are different here.
-#if !defined(V8_OS_FREEBSD) && !defined(V8_OS_MACOSX)
+#if !defined(V8_OS_FREEBSD) && !defined(V8_OS_MACOSX) && !defined(V8_OS_HAIKU)
 
 // static
 void* Stack::GetStackStart() {

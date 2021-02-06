@@ -1682,24 +1682,6 @@ jumbo_component("base") {
     public_deps += [ "//third_party/boringssl" ]
   }
 
-  if (is_haiku) {
-    sources -= [ 
-      "process/memory.cc",
-    ]
-    sources += [
-      "base_paths_haiku.cc",
-      "base_paths_haiku.h",
-      "process/memory_stubs.cc",
-      "process/process_handle_haiku.cc",
-      "process/process_iterator_haiku.cc",
-      "process/process_metrics_haiku.cc",
-      "threading/platform_thread_haiku.cc",
-      "sys_info_haiku.cc"
-    ]
-
-    defines += [ "_BSD_SOURCE", "__USE_XOPEN2K8" ]
-  }
-
   # NaCl.
   if (is_nacl) {
     # Explicitly include the linux file.
@@ -1971,6 +1953,36 @@ jumbo_component("base") {
         "linux_util.h",
       ]
     }
+  }
+
+  if (is_haiku) {
+    sources -= [ 
+      "process/memory_linux.cc",
+      "process/process_handle_linux.cc",
+      "process/process_iterator_linux.cc",
+      "process/process_metrics_linux.cc",
+      "files/file_path_watcher_linux.cc",
+      "files/file_util_linux.cc",
+      "system/sys_info_linux.cc",
+      "threading/platform_thread_linux.cc",
+      "debug/proc_maps_linux.cc",
+      "debug/proc_maps_linux.h",
+    ]
+#      "memory/madv_free_discardable_memory_posix.cc",
+#     "memory/madv_free_discardable_memory_posix.h",
+    sources += [
+      "base_paths_haiku.cc",
+      "base_paths_haiku.h",
+      "files/file_path_watcher_stub.cc",
+      "process/memory_stubs.cc",
+      "process/process_handle_haiku.cc",
+      "process/process_iterator_haiku.cc",
+      "process/process_metrics_haiku.cc",
+      "threading/platform_thread_haiku.cc",
+      "system/sys_info_haiku.cc"
+    ]
+
+    defines += [ "_BSD_SOURCE", "__USE_XOPEN2K8" ]
   }
 
   # iOS

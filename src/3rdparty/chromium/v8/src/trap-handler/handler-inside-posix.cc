@@ -114,6 +114,8 @@ bool TryHandleSignal(int signum, siginfo_t* info, void* context) {
     auto* context_rip = &uc->uc_mcontext->__ss.__rip;
 #elif V8_OS_FREEBSD
     auto* context_rip = &uc->uc_mcontext.mc_rip;
+#elif V8_OS_HAIKU
+    auto* context_rip = &uc->uc_mcontext.rip;
 #else
 #error Unsupported platform
 #endif

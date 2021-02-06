@@ -267,12 +267,12 @@ Process Process::DeprecatedGetProcessFromHandle(ProcessHandle handle) {
   return Process(handle);
 }
 
-#if !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX)
+#if !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX) && !defined(OS_HAIKU)
 // static
 bool Process::CanBackgroundProcesses() {
   return false;
 }
-#endif  // !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX)
+#endif  // !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX) && !defined(OS_HAIKU)
 
 // static
 void Process::TerminateCurrentProcessImmediately(int exit_code) {
@@ -362,7 +362,7 @@ bool Process::WaitForExitWithTimeout(TimeDelta timeout, int* exit_code) const {
 
 void Process::Exited(int exit_code) const {}
 
-#if !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX)
+#if !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX) && !defined(OS_HAIKU)
 bool Process::IsProcessBackgrounded() const {
   // See SetProcessBackgrounded().
   DCHECK(IsValid());
@@ -376,7 +376,7 @@ bool Process::SetProcessBackgrounded(bool value) {
   NOTIMPLEMENTED();
   return false;
 }
-#endif  // !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX)
+#endif  // !defined(OS_LINUX) && !defined(OS_MACOSX) && !defined(OS_AIX) && !defined(OS_HAIKU)
 
 int Process::GetPriority() const {
   DCHECK(IsValid());

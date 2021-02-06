@@ -569,7 +569,7 @@ jumbo_source_set("memory_buffer_sources") {
     "//ui/gfx/geometry",
   ]
 
-  if (is_linux && !use_qt) {
+  if (is_linux && !is_haiku && !use_qt) {
     sources += [
       "linux/client_native_pixmap_dmabuf.cc",
       "linux/client_native_pixmap_dmabuf.h",
@@ -582,7 +582,7 @@ jumbo_source_set("memory_buffer_sources") {
     deps += [ "//build/config/linux/libdrm" ]
   }
 
-  if (is_linux || is_android) {
+  if ((is_linux || is_android) && !is_haiku) {
     deps += [ "//third_party/libsync" ]
   }
 

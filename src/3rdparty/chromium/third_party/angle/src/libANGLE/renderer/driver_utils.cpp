@@ -16,7 +16,7 @@
 #    include <sys/system_properties.h>
 #endif
 
-#if defined(ANGLE_PLATFORM_LINUX)
+#if defined(ANGLE_PLATFORM_POSIX)
 #    include <sys/utsname.h>
 #endif
 
@@ -206,7 +206,7 @@ OSVersion GetMacOSVersion()
 }
 #endif
 
-#if defined(ANGLE_PLATFORM_LINUX)
+#if defined(ANGLE_PLATFORM_POSIX)
 bool ParseLinuxOSVersion(const char *version, int *major, int *minor, int *patch)
 {
     errno = 0;  // reset global error flag.
@@ -218,6 +218,13 @@ bool ParseLinuxOSVersion(const char *version, int *major, int *minor, int *patch
     }
 
     *minor = static_cast<int>(strtol(next + 1, &next, 10));
+#ifdef __HAIKU__
+    if (next == nullptr || *next != '.' || errno != 0)
+    {
+        return false;
+    }
+	*patch = 0;
+#else
     if (next == nullptr || *next != '.' || errno != 0)
     {
         return false;
@@ -228,7 +235,7 @@ bool ParseLinuxOSVersion(const char *version, int *major, int *minor, int *patch
     {
         return false;
     }
-
+#endif
     return true;
 }
 #endif

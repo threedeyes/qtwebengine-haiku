@@ -70,7 +70,7 @@ typedef void* SockOptArg;
 
 #endif  // WEBRTC_POSIX
 
-#if defined(WEBRTC_POSIX) && !defined(WEBRTC_MAC) && !defined(__native_client__)
+#if defined(WEBRTC_POSIX) && !defined(WEBRTC_MAC) && !defined(__native_client__) && !defined(__HAIKU__)
 
 int64_t GetSocketRecvTimestamp(int socket) {
   struct timeval tv_ioctl;
@@ -319,7 +319,7 @@ int PhysicalSocket::SetOption(Option opt, int value) {
     value <<= 2;
 #endif
   }
-#if defined(WEBRTC_POSIX)
+#if defined(WEBRTC_POSIX) && !defined(__HAIKU__)
   if (sopt == IPV6_TCLASS) {
     // Set the IPv4 option in all cases to support dual-stack sockets.
     ::setsockopt(s_, IPPROTO_IP, IP_TOS, (SockOptArg)&value, sizeof(value));
@@ -554,7 +554,7 @@ int PhysicalSocket::TranslateOption(Option opt, int* slevel, int* sopt) {
 #elif defined(WEBRTC_MAC) || defined(BSD) || defined(__native_client__)
       RTC_LOG(LS_WARNING) << "Socket::OPT_DONTFRAGMENT not supported.";
       return -1;
-#elif defined(WEBRTC_POSIX)
+#elif defined(WEBRTC_POSIX) && !defined(__HAIKU__)
       *slevel = IPPROTO_IP;
       *sopt = IP_MTU_DISCOVER;
       break;
@@ -572,7 +572,7 @@ int PhysicalSocket::TranslateOption(Option opt, int* slevel, int* sopt) {
       *sopt = TCP_NODELAY;
       break;
     case OPT_DSCP:
-#if defined(WEBRTC_POSIX)
+#if defined(WEBRTC_POSIX) && !defined(__HAIKU__)
       if (family_ == AF_INET6) {
         *slevel = IPPROTO_IPV6;
         *sopt = IPV6_TCLASS;

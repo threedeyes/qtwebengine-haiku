@@ -30,6 +30,10 @@
 #include <sys/ioctl.h>
 #endif  // !OS_IOS
 
+#if defined(OS_HAIKU)
+#define IFF_RUNNING IFF_LINK
+#endif
+
 namespace net {
 namespace internal {
 

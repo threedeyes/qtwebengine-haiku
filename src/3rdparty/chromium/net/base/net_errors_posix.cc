@@ -106,8 +106,10 @@ Error MapSystemError(logging::SystemErrorCode os_error) {
       return ERR_ACCESS_DENIED;
     case ETXTBSY:  // Text file busy.
       return ERR_ACCESS_DENIED;
+#if !defined(OS_HAIKU)
     case EUSERS:  // Too many users.
       return ERR_INSUFFICIENT_RESOURCES;
+#endif
     case EMFILE:  // Too many open files.
       return ERR_INSUFFICIENT_RESOURCES;
     case ENOPROTOOPT:  // Protocol option not supported.

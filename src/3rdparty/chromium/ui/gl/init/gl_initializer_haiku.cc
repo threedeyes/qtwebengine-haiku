@@ -10,12 +10,10 @@
 #include "base/threading/thread_restrictions.h"
 #include "build/build_config.h"
 #include "ui/gfx/switches.h"
+#include "ui/gl/buildflags.h"
 #include "ui/gl/gl_bindings.h"
 #include "ui/gl/gl_egl_api_implementation.h"
-#include "ui/gl/gl_features.h"
 #include "ui/gl/gl_gl_api_implementation.h"
-#include "ui/gl/gl_implementation_osmesa.h"
-#include "ui/gl/gl_osmesa_api_implementation.h"
 #include "ui/gl/gl_surface_egl.h"
 #include "ui/gl/gl_switches.h"
 
@@ -102,19 +100,9 @@ bool InitializeStaticEGLInternal(GLImplementation implementation) {
 
 }  // namespace
 
-#if !defined(TOOLKIT_QT)
 bool InitializeGLOneOffPlatform() {
-  const base::CommandLine* command_line =
-      base::CommandLine::ForCurrentProcess();
-  if (command_line->HasSwitch(switches::kHeadless) &&
-      command_line->GetSwitchValueASCII(switches::kUseGL) ==
-          kGLImplementationOSMesaName)
-    return true;
-
   switch (GetGLImplementation()) {
     case kGLImplementationDesktopGL:
-      return true;
-    case kGLImplementationOSMesaGL:
       return true;
     case kGLImplementationSwiftShaderGL:
     case kGLImplementationEGLGLES2:
@@ -128,7 +116,6 @@ bool InitializeGLOneOffPlatform() {
   }
 }
 
-#endif // !defined(TOOLKIT_QT)
 bool InitializeStaticGLBindings(GLImplementation implementation) {
   // Prevent reinitialization with a different implementation. Once the gpu
   // unit tests have initialized with kGLImplementationMock, we don't want to
@@ -142,7 +129,6 @@ bool InitializeStaticGLBindings(GLImplementation implementation) {
   base::ThreadRestrictions::ScopedAllowIO allow_io;
 
   switch (implementation) {
-    case kGLImplementationOSMesaGL:
     case kGLImplementationDesktopGL:
     case kGLImplementationSwiftShaderGL:
     case kGLImplementationEGLGLES2:
@@ -157,11 +143,6 @@ bool InitializeStaticGLBindings(GLImplementation implementation) {
   }
 
   return false;
-}
-
-void InitializeDebugGLBindings() {
-  InitializeDebugGLBindingsEGL();
-  InitializeDebugGLBindingsGL();
 }
 
 void ShutdownGLPlatform() {

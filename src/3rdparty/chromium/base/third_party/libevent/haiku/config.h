@@ -122,7 +122,7 @@
 #define HAVE_STRLCPY 1
 
 /* Define to 1 if you have the `strsep' function. */
-/* #undef HAVE_STRSEP */
+#define HAVE_STRSEP 1
 
 /* Define to 1 if you have the `strtok_r' function. */
 #define HAVE_STRTOK_R 1

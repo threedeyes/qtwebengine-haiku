@@ -32,7 +32,13 @@ jumbo_component("init") {
 
   public_deps = [ "//ui/gl" ]
 
-  if (is_android) {
+  if (is_haiku && !use_ozone) {
+    sources += [
+      "gl_factory_haiku.cc",
+      "gl_initializer_haiku.cc",
+    ]
+    libs = [ "GL" ]
+  } else if (is_android) {
     sources += [
       "gl_factory_android.cc",
       "gl_initializer_android.cc",
@@ -71,14 +77,5 @@ jumbo_component("init") {
     ]
 
     deps += [ "//ui/ozone" ]
-  } else if (is_haiku) {
-    sources += [
-      "gl_factory_haiku.cc",
-      "gl_initializer_haiku.cc",
-    ]
-    deps += [
-      "//ui/gl:gl_features",
-    ]
-    libs = [ "GL" ]
   }
 }

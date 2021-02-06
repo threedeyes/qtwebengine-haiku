@@ -130,7 +130,8 @@ jumbo_component("service") {
   if (is_linux) {
     sources += [ "image_transport_surface_linux.cc" ]
   }
-  if (is_linux || use_ozone) {
+#  if ((is_linux || use_ozone) && !is_haiku) {
+  if ((is_linux || use_ozone)) {
     sources += [
       "gpu_memory_buffer_factory_native_pixmap.cc",
       "gpu_memory_buffer_factory_native_pixmap.h",

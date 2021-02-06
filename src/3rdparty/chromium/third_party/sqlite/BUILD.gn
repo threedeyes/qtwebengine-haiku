@@ -138,7 +138,7 @@ config("sqlite_warnings") {
       ]
     }
   }
-  if (is_linux) {
+  if (is_linux && !is_haiku) {
     cflags += [
       # SQLite doesn't believe in compiler warnings, preferring testing.
       # http://www.sqlite.org/faq.html#q17
@@ -189,7 +189,7 @@ component("chromium_sqlite3") {
     }
   }
 
-  if (is_linux || is_android) {
+  if ((is_linux && !is_haiku) || is_android) {
     defines += [
       # Linux provides fdatasync(), a faster equivalent of fsync().
       "fdatasync=fdatasync",
