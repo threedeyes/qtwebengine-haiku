@@ -78,8 +78,7 @@ extern int madvise(caddr_t, size_t, int);
 #endif
 
 #if defined(V8_OS_HAIKU)
-#define madvise posix_madvise
-#define MADV_DONTNEED POSIX_MADV_DONTNEED
+#define MADV_FREE POSIX_MADV_DONTNEED
 #endif
 
 #ifndef MADV_FREE
@@ -139,7 +138,7 @@ int GetProtectionFromMemoryPermission(OS::MemoryPermission access) {
 int GetFlagsForMemoryPermission(OS::MemoryPermission access) {
   int flags = MAP_PRIVATE | MAP_ANONYMOUS;
   if (access == OS::MemoryPermission::kNoAccess) {
-#if !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX && !V8_OS_HAIKU
+#if !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX
     flags |= MAP_NORESERVE;
 #endif  // !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX
 #if V8_OS_QNX
@@ -418,6 +417,8 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
   int ret = madvise(address, size, MADV_FREE_REUSABLE);
 #elif defined(_AIX) || defined(V8_OS_SOLARIS)
   int ret = madvise(reinterpret_cast<caddr_t>(address), size, MADV_FREE);
+#elif defined(V8_OS_HAIKU)
+  int ret = posix_madvise(address, size, MADV_FREE);
 #else
   int ret = madvise(address, size, MADV_FREE);
 #endif
@@ -429,6 +430,8 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
 // imply runtime support.
 #if defined(_AIX) || defined(V8_OS_SOLARIS)
     ret = madvise(reinterpret_cast<caddr_t>(address), size, MADV_DONTNEED);
+#elif defined(V8_OS_HAIKU)
+    ret = posix_madvise(address, size, MADV_FREE);
 #else
     ret = madvise(address, size, MADV_DONTNEED);
 #endif

@@ -14,7 +14,7 @@ namespace base {
 int64_t SysInfo::AmountOfPhysicalMemoryImpl() {
     system_info systemInfo;
     get_system_info(&systemInfo);
-    return static_cast<int64_t>(systemInfo.max_pages * (B_PAGE_SIZE / 1048576.0f) + 0.5f);
+    return static_cast<int64_t>(systemInfo.max_pages * B_PAGE_SIZE + 0.5f);
 }
 
 // static
@@ -22,7 +22,7 @@ int64_t SysInfo::AmountOfAvailablePhysicalMemoryImpl() {
     system_info systemInfo;
     get_system_info(&systemInfo);
     return static_cast<int64_t>((systemInfo.max_pages - systemInfo.used_pages)
-    	* (B_PAGE_SIZE / 1048576.0f) + 0.5f);
+        * B_PAGE_SIZE + 0.5f);
 }
 
 

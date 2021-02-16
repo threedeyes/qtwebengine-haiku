@@ -6,5 +6,5 @@ import("//build/config/dcheck_always_on.gni")
 
 declare_args() {
   # Use LogErrorNotReached() for NOTREACHED().
-  enable_log_error_not_reached = is_chromeos && !(is_debug || dcheck_always_on)
+  enable_log_error_not_reached = is_haiku || is_chromeos && !(is_debug || dcheck_always_on)
 }

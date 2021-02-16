@@ -226,7 +226,11 @@ size_t ThreadStackSize() {
   uint8_t* stack_end = reinterpret_cast<uint8_t*>(threadInfo.stack_end);
   uint8_t* stack_start = reinterpret_cast<uint8_t*>(threadInfo.stack_base);
   CHECK(stack_start);
-  CHECK_GT(stack_start, stack_end);
+  // From BeBook (thread_info):
+  // The two stack pointers are currently inverted such that
+  // stack_base is less than stack_end.
+  // (In a stack-grows-down world, the base should be greater than the end.)
+  CHECK_GT(stack_end, stack_start);
   size_t thread_stack_size = static_cast<size_t>(stack_start - stack_end);
   return thread_stack_size;
 }
