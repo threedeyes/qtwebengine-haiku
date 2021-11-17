@@ -41,11 +41,6 @@
 #include "base/fuchsia/fuchsia_logging.h"
 #endif
 
-#if defined(OS_HAIKU)
-#define madvise posix_madvise
-#define MADV_DONTNEED POSIX_MADV_DONTNEED
-#endif
-
 namespace base {
 namespace {
 
