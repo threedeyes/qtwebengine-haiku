@@ -77,10 +77,6 @@ extern int madvise(caddr_t, size_t, int);
 #endif
 #endif
 
-#if defined(V8_OS_HAIKU)
-#define MADV_FREE POSIX_MADV_DONTNEED
-#endif
-
 #ifndef MADV_FREE
 #define MADV_FREE MADV_DONTNEED
 #endif
@@ -450,8 +446,6 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
   int ret = madvise(address, size, MADV_FREE_REUSABLE);
 #elif defined(_AIX) || defined(V8_OS_SOLARIS)
   int ret = madvise(reinterpret_cast<caddr_t>(address), size, MADV_FREE);
-#elif defined(V8_OS_HAIKU)
-  int ret = posix_madvise(address, size, MADV_FREE);
 #else
   int ret = madvise(address, size, MADV_FREE);
 #endif
@@ -463,8 +457,6 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
 // imply runtime support.
 #if defined(_AIX) || defined(V8_OS_SOLARIS)
     ret = madvise(reinterpret_cast<caddr_t>(address), size, MADV_DONTNEED);
-#elif defined(V8_OS_HAIKU)
-    ret = posix_madvise(address, size, MADV_FREE);
 #else
     ret = madvise(address, size, MADV_DONTNEED);
 #endif

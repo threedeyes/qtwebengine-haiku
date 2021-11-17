@@ -206,7 +206,7 @@ void DiscardSystemPagesInternal(void* address, size_t length) {
   // performance benefits unclear.
   //
   // Therefore, we just do the simple thing: MADV_DONTNEED.
-  CHECK(!posix_madvise(address, length, POSIX_MADV_DONTNEED));
+  CHECK(!madvise(address, length, MADV_DONTNEED));
 #endif
 }
 

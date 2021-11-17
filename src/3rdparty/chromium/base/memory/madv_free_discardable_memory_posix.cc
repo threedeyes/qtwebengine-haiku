@@ -26,9 +26,6 @@
 #include "base/trace_event/memory_dump_manager.h"    // no-presubmit-check
 #endif  // BUILDFLAG(ENABLE_BASE_TRACING)
 
-#define MADV_DONTNEED POSIX_MADV_DONTNEED
-#define madvise posix_madvise
-
 #if defined(ADDRESS_SANITIZER)
 #include <sanitizer/asan_interface.h>
 #endif  // defined(ADDRESS_SANITIZER)
