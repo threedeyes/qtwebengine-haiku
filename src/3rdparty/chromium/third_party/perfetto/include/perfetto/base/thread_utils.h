@@ -27,15 +27,16 @@
 #elif PERFETTO_BUILDFLAG(PERFETTO_OS_FUCHSIA)
 #include <zircon/process.h>
 #include <zircon/types.h>
-#else
-#include <pthread.h>
-#if !PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU)
+#elif PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
+    PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)
 #include <sys/syscall.h>
-#else
-#include <OS.h>
-#endif
 #include <sys/types.h>
 #include <unistd.h>
+#else
+#include <pthread.h>
+#if PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU)
+#include <OS.h>
+#endif
 #endif
 
 namespace perfetto {
@@ -61,7 +62,7 @@ using PlatformThreadId = zx_handle_t;
 inline PlatformThreadId GetThreadId() {
   return zx_thread_self();
 }
-#elif PERFETTO_BUILDFLAG(PERFETTO_OS_MACOSX)
+#elif PERFETTO_BUILDFLAG(PERFETTO_OS_APPLE)
 using PlatformThreadId = uint64_t;
 inline PlatformThreadId GetThreadId() {
   uint64_t tid;

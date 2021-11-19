@@ -13,9 +13,9 @@ using sandbox::syscall_broker::MakeBrokerCommandSet;
 
 namespace network {
 
-bool NetworkPreSandboxHook(service_manager::SandboxLinux::Options options) {
+bool NetworkPreSandboxHook(sandbox::policy::SandboxLinux::Options options) {
 #if !defined(OS_HAIKU)
-  auto* instance = service_manager::SandboxLinux::GetInstance();
+  auto* instance = sandbox::policy::SandboxLinux::GetInstance();
 
   // TODO(tsepez): remove universal permission under filesytem root.
   instance->StartBrokerProcess(
@@ -30,7 +30,7 @@ bool NetworkPreSandboxHook(service_manager::SandboxLinux::Options options) {
           sandbox::syscall_broker::COMMAND_UNLINK,
       }),
       {BrokerFilePermission::ReadWriteCreateRecursive("/")},
-      service_manager::SandboxLinux::PreSandboxHook(), options);
+      sandbox::policy::SandboxLinux::PreSandboxHook(), options);
 
   instance->EngageNamespaceSandboxIfPossible();
 #endif

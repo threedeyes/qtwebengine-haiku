@@ -9,6 +9,8 @@
 #include "content/browser/child_process_launcher_helper.h"
 #include "content/browser/child_process_launcher_helper_posix.h"
 #include "content/browser/sandbox_host_linux.h"
+#include "content/browser/zygote_host/zygote_host_impl_linux.h"
+#include "content/common/zygote/zygote_communication_linux.h"
 #include "content/public/browser/child_process_launcher_utils.h"
 #include "content/public/browser/content_browser_client.h"
 #include "content/public/common/content_client.h"
@@ -16,13 +18,11 @@
 #include "content/public/common/content_switches.h"
 #include "content/public/common/result_codes.h"
 #include "content/public/common/sandboxed_process_launcher_delegate.h"
-#include "services/service_manager/sandbox/linux/sandbox_linux.h"
-#include "services/service_manager/zygote/common/common_sandbox_support_linux.h"
+#include "content/public/common/zygote/sandbox_support_linux.h"
 #if !defined(OS_HAIKU)
-#include "services/service_manager/zygote/common/zygote_handle.h"
+#include "content/public/common/zygote/zygote_handle.h"
 #endif
-#include "services/service_manager/zygote/host/zygote_communication_linux.h"
-#include "services/service_manager/zygote/host/zygote_host_impl_linux.h"
+#include "sandbox/policy/linux/sandbox_linux.h"
 
 namespace content {
 namespace internal {
@@ -55,8 +55,7 @@ bool ChildProcessLauncherHelper::BeforeLaunchOnLauncherThread(
 #if !defined(OS_HAIKU)
   if (GetProcessType() == switches::kRendererProcess) {
     const int sandbox_fd = SandboxHostLinux::GetInstance()->GetChildSocket();
-    options->fds_to_remap.push_back(
-        std::make_pair(sandbox_fd, service_manager::GetSandboxFD()));
+    options->fds_to_remap.push_back(std::make_pair(sandbox_fd, GetSandboxFD()));
   }
 #endif
 
@@ -74,7 +73,7 @@ ChildProcessLauncherHelper::LaunchProcessOnLauncherThread(
   *is_synchronous_launch = true;
 
 #if !defined(OS_HAIKU)
-  service_manager::ZygoteHandle zygote_handle =
+  ZygoteHandle zygote_handle =
       base::CommandLine::ForCurrentProcess()->HasSwitch(switches::kNoZygote)
           ? nullptr
           : delegate_->GetZygote();
@@ -93,8 +92,7 @@ ChildProcessLauncherHelper::LaunchProcessOnLauncherThread(
       if (command_line()->GetSwitchValueASCII(switches::kProcessType) ==
           switches::kRendererProcess)
         oom_score = content::kLowestRendererOomScore;
-      service_manager::ZygoteHostImpl::GetInstance()->AdjustRendererOOMScore(
-          handle, oom_score);
+      ZygoteHostImpl::GetInstance()->AdjustRendererOOMScore(handle, oom_score);
     }
 
     Process process;
@@ -149,7 +147,7 @@ bool ChildProcessLauncherHelper::TerminateProcess(const base::Process& process,
 void ChildProcessLauncherHelper::ForceNormalProcessTerminationSync(
     ChildProcessLauncherHelper::Process process) {
   DCHECK(CurrentlyOnProcessLauncherTaskRunner());
-  process.process.Terminate(service_manager::RESULT_CODE_NORMAL_EXIT, false);
+  process.process.Terminate(RESULT_CODE_NORMAL_EXIT, false);
   // On POSIX, we must additionally reap the child.
 #if !defined(OS_HAIKU)
   if (process.zygote) {
