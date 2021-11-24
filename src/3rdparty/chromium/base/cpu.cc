@@ -17,7 +17,7 @@
 #include "base/stl_util.h"
 
 #if defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_ANDROID) || \
-    defined(OS_AIX)
+    defined(OS_AIX) || defined(OS_HAIKU)
 #include "base/containers/flat_set.h"
 #include "base/files/file_util.h"
 #include "base/no_destructor.h"

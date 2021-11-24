@@ -105,7 +105,6 @@ Provider base_provider_fuchsia = {PathProviderFuchsia, &base_provider,
                                   true};
 #endif
 
-<<<<<<< HEAD
 #if defined(OS_HAIKU)
 Provider base_provider_haiku = {PathProviderHaiku, &base_provider,
 #ifndef NDEBUG

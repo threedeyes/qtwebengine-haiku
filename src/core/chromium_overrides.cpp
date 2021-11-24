@@ -36,7 +36,7 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #include "ozone/gl_context_qt.h"
 #include "qtwebenginecoreglobal_p.h"
 #include "web_contents_view_qt.h"

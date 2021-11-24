@@ -37,6 +37,7 @@
 **
 ****************************************************************************/
 
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #include "content/browser/web_contents/web_contents_impl.h"
 
 #include "color_chooser_controller.h"

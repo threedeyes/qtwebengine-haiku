@@ -4,5 +4,3 @@ gn_args += \
     enable_print_preview=true \
     use_dbus=true \
     use_udev=false
-
-gn_args += use_system_yasm=true

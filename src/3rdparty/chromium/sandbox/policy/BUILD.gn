@@ -27,7 +27,7 @@ component("policy") {
     "//sandbox:common",
   ]
   public_deps = []
-  if (is_linux || is_chromeos) {
+  if ((is_linux || is_chromeos) && !is_haiku) {
     sources += [
       "linux/bpf_audio_policy_linux.cc",
       "linux/bpf_audio_policy_linux.h",

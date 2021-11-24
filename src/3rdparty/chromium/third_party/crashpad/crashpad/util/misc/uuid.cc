@@ -95,13 +95,8 @@ bool UUID::InitializeWithNew() {
   uuid_generate(uuid);
   InitializeFromBytes(uuid);
   return true;
-<<<<<<< HEAD
-#elif defined(OS_WIN) || defined(OS_LINUX) || defined(OS_ANDROID) || \
-    defined(OS_FUCHSIA) || defined(OS_HAIKU)
-=======
 #elif defined(OS_WIN) || defined(OS_LINUX) || defined(OS_CHROMEOS) || \
-    defined(OS_ANDROID) || defined(OS_FUCHSIA)
->>>>>>> master
+    defined(OS_ANDROID) || defined(OS_FUCHSIA) || defined(OS_HAIKU)
   // Linux, Android, and Fuchsia do not provide a UUID generator in a
   // widely-available system library. On Linux and Android, uuid_generate()
   // from libuuid is not available everywhere.

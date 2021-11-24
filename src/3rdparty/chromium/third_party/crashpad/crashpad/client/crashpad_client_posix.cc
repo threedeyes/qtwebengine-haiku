@@ -15,6 +15,7 @@
 #include "client/crashpad_client.h"
 
 #include "base/logging.h"
+#include "base/notreached.h"
 
 namespace crashpad {
 
@@ -30,7 +31,8 @@ bool CrashpadClient::StartHandler(
     const std::map<std::string, std::string>& annotations,
     const std::vector<std::string>& arguments,
     bool restartable,
-    bool asynchronous_start) {
+    bool asynchronous_start,
+    const std::vector<base::FilePath>& attachments) {
   NOTREACHED();  // TODO(scottmg): https://crashpad.chromium.org/bug/196
   return false;
 }

@@ -357,7 +357,7 @@
 #define HAVE_STDARG_H 1
 
 /* Define to 1 if stdbool.h conforms to C99. */
-/* #undef HAVE_STDBOOL_H */
+#define HAVE_STDBOOL_H 1
 
 /* Define to 1 if your compiler supports C99 extern inline */
 #define HAVE_STDC_INLINE 1

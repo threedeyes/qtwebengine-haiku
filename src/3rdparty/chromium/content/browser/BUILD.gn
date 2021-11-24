@@ -2139,9 +2139,6 @@ jumbo_static_library("browser") {
   if (!is_fuchsia && !is_android) {
     deps += [ "//content/browser/devtools:devtools_resources" ]
   }
-  if (is_haiku) {
-    deps -= [ "//services/service_manager/zygote" ]
-  }
 
   if (enable_basic_printing) {
     deps += [ "//printing" ]

@@ -42,6 +42,8 @@ const char kProduct[] = "Chrome_Mac";
 const char kProduct[] = "Chrome_ChromeOS";
 #elif defined(OS_LINUX)
 const char kProduct[] = "Chrome_Linux";
+#elif defined(OS_HAIKU)
+const char kProduct[] = "Chrome_Haiku";
 #elif defined(OS_ANDROID)
 const char kProduct[] = "Chrome_Android";
 #else

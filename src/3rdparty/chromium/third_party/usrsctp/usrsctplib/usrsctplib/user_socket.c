@@ -1947,7 +1947,7 @@ int user_connect(struct socket *so, struct sockaddr *sa)
 		error = pthread_cond_wait(SOCK_COND(so), SOCK_MTX(so));
 #endif
 		if (error) {
-#if defined(__NetBSD__) && !defined(__HAIKU__)
+#if defined(__NetBSD__) || defined(__HAIKU__)
 			if (error == EINTR) {
 #else
 			if (error == EINTR || error == ERESTART) {

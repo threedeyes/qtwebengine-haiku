@@ -4,7 +4,7 @@
 
 #include "base/system/sys_info.h"
 
-#include "base/logging.h"
+#include "base/notreached.h"
 
 #include <kernel/OS.h>
 
@@ -25,5 +25,11 @@ int64_t SysInfo::AmountOfAvailablePhysicalMemoryImpl() {
         * B_PAGE_SIZE + 0.5f);
 }
 
+// static
+std::string SysInfo::CPUModelName() {
+    system_info systemInfo;
+  NOTIMPLEMENTED();
+  return std::string();
+}
 
 }  // namespace base

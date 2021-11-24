@@ -43,8 +43,8 @@ CONFIG -= bsymbolic_functions
 
 unix {
     !ccache:!use_gold_linker:!use_lld_linker {
-        QMAKE_LINK="ulimit -n 4096 && $$QMAKE_LINK"
-        QMAKE_LINK_SHLIB="ulimit -n 4096 && $$QMAKE_LINK_SHLIB"
+        QMAKE_LINK="ulimit -S -n 4096 && $$QMAKE_LINK"
+        QMAKE_LINK_SHLIB="ulimit -S -n 4096 && $$QMAKE_LINK_SHLIB"
     }
     qtConfig(separate_debug_info): QMAKE_POST_LINK="cd $(DESTDIR) && $(STRIP) --strip-unneeded $(TARGET)"
 }
