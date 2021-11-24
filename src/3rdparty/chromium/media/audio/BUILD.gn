@@ -299,6 +299,8 @@ source_set("audio") {
 
   if (is_haiku) {
     sources += [
+      "haiku/audio_input_stream_haiku.cc",
+      "haiku/audio_input_stream_haiku.h",
       "haiku/audio_manager_haiku.cc",
       "haiku/audio_manager_haiku.h",
       "haiku/audio_output_stream_haiku.cc",
