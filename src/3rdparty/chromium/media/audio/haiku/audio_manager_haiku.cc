@@ -6,6 +6,7 @@
 
 #include <memory>
 
+#include "media/audio/haiku/audio_input_stream_haiku.h"
 #include "media/audio/haiku/audio_output_stream_haiku.h"
 
 namespace media {
@@ -37,13 +38,17 @@ void AudioManagerHaiku::GetAudioOutputDeviceNames(
 
 AudioParameters AudioManagerHaiku::GetInputStreamParameters(
     const std::string& device_id) {
-  AudioParameters params(AudioParameters::AUDIO_PCM_LOW_LATENCY,
-                         CHANNEL_LAYOUT_MONO, 16000, 160);
-  params.set_effects(AudioParameters::ECHO_CANCELLER |
-                     AudioParameters::NOISE_SUPPRESSION |
-                     AudioParameters::AUTOMATIC_GAIN_CONTROL);
+  HaikuAudioRecorder recorder;
+  if (recorder.Open()) {
+      AudioParameters params(AudioParameters::AUDIO_PCM_LOW_LATENCY,
+                             recorder.Channels(), recorder.SampleRate(),
+                             recorder.SampleRate() / 100);
+      params.set_effects(AudioParameters::NO_EFFECTS);
+      return params;
+  }
 
-  return params;
+  return AudioParameters(AudioParameters::AUDIO_PCM_LOW_LATENCY,
+                         CHANNEL_LAYOUT_STEREO, 48000, 480);
 }
 
 AudioParameters AudioManagerHaiku::GetPreferredOutputStreamParameters(
@@ -60,8 +65,8 @@ const char* AudioManagerHaiku::GetName() {
 AudioOutputStream* AudioManagerHaiku::MakeLinearOutputStream(
     const AudioParameters& params,
     const LogCallback& log_callback) {
-  NOTREACHED();
-  return nullptr;
+  DCHECK_EQ(AudioParameters::AUDIO_PCM_LINEAR, params.format());
+  return new AudioOutputStreamHaiku(this, params);
 }
 
 AudioOutputStream* AudioManagerHaiku::MakeLowLatencyOutputStream(
@@ -69,12 +74,6 @@ AudioOutputStream* AudioManagerHaiku::MakeLowLatencyOutputStream(
     const std::string& device_id,
     const LogCallback& log_callback) {
   DCHECK_EQ(AudioParameters::AUDIO_PCM_LOW_LATENCY, params.format());
-
-  if (!device_id.empty() &&
-      device_id != AudioDeviceDescription::kDefaultDeviceId) {
-    return nullptr;
-  }
-
   return new AudioOutputStreamHaiku(this, params);
 }
 
@@ -82,16 +81,16 @@ AudioInputStream* AudioManagerHaiku::MakeLinearInputStream(
     const AudioParameters& params,
     const std::string& device_id,
     const LogCallback& log_callback) {
-  NOTREACHED();
-  return nullptr;
+  DCHECK_EQ(AudioParameters::AUDIO_PCM_LINEAR, params.format());
+  return new AudioInputStreamHaiku(this, params);
 }
 
 AudioInputStream* AudioManagerHaiku::MakeLowLatencyInputStream(
     const AudioParameters& params,
     const std::string& device_id,
     const LogCallback& log_callback) {
-  NOTREACHED();
-  return nullptr;
+  DCHECK_EQ(AudioParameters::AUDIO_PCM_LOW_LATENCY, params.format());
+  return new AudioInputStreamHaiku(this, params);
 }
 
 std::unique_ptr<AudioManager> CreateAudioManager(
