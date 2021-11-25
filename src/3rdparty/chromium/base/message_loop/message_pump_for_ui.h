@@ -20,7 +20,7 @@
 // No MessagePumpForUI, see below.
 #elif defined(USE_GLIB)
 #include "base/message_loop/message_pump_glib.h"
-#elif defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD)
+#elif defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_BSD) || defined(OS_HAIKU)
 #include "base/message_loop/message_pump_libevent.h"
 #elif defined(OS_FUCHSIA)
 #include "base/message_loop/message_pump_fuchsia.h"

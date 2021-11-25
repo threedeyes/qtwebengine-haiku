@@ -19,6 +19,11 @@ std::unique_ptr<ProcessMetrics> ProcessMetrics::CreateProcessMetrics(
   return nullptr;
 }
 
+size_t ProcessMetrics::GetResidentSetSize() const {
+  NOTIMPLEMENTED();  // TODO(fuchsia): https://crbug.com/706592.
+  return 0;
+}
+
 TimeDelta ProcessMetrics::GetCumulativeCPUUsage() {
   NOTIMPLEMENTED();  // TODO(fuchsia): https://crbug.com/706592.
   return TimeDelta();
@@ -28,5 +33,11 @@ bool GetSystemMemoryInfo(SystemMemoryInfoKB* meminfo) {
   NOTIMPLEMENTED();  // TODO(fuchsia): https://crbug.com/706592.
   return false;
 }
+
+uint64_t ProcessMetrics::GetVmSwapBytes() const {
+  NOTIMPLEMENTED();  // TODO(fuchsia): https://crbug.com/706592.
+  return 0;
+}
+
 
 }  // namespace base

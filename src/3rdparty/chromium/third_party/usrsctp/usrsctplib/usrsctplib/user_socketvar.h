@@ -155,7 +155,11 @@ struct socket {
 	short	so_timeo;		/* (g) connection timeout */
 	userland_cond_t timeo_cond;      /* timeo_cond condition variable being used in wakeup */
 
+#ifdef __HAIKU__
+	int	so_error;		/* (f) error affecting connection */
+#else
 	u_short	so_error;		/* (f) error affecting connection */
+#endif
 	struct	sigio *so_sigio;	/* [sg] information for async I/O or
 					   out of band data (SIGURG) */
 	u_long	so_oobmark;		/* (c) chars to oob mark */

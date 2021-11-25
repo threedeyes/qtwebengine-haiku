@@ -102,10 +102,6 @@ source_set("ipc_common_sources") {
       "gpu_memory_buffer_impl_native_pixmap.cc",
       "gpu_memory_buffer_impl_native_pixmap.h",
     ]
-    configs += [
-      "//third_party/vulkan:vulkan_config",
-    ]
-
   }
   if (is_android) {
     sources += [

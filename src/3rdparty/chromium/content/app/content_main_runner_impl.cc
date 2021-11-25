@@ -461,6 +461,7 @@ int RunZygote(ContentMainDelegate* delegate) {
   };
 
   std::vector<std::unique_ptr<ZygoteForkDelegate>> zygote_fork_delegates;
+#if defined(OS_LINUX)
   delegate->ZygoteStarting(&zygote_fork_delegates);
 #endif
   media::InitializeMediaLibrary();

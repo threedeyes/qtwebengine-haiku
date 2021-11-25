@@ -29,14 +29,15 @@
 #include <zircon/types.h>
 #elif PERFETTO_BUILDFLAG(PERFETTO_OS_LINUX) || \
     PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID)
+#if PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU)
+#include <OS.h>
+#else
 #include <sys/syscall.h>
+#endif
 #include <sys/types.h>
 #include <unistd.h>
 #else
 #include <pthread.h>
-#if PERFETTO_BUILDFLAG(PERFETTO_OS_HAIKU)
-#include <OS.h>
-#endif
 #endif
 
 namespace perfetto {

@@ -25,11 +25,7 @@
 #define METRICS_OS_NAME "Win"
 #elif defined(OS_ANDROID)
 #define METRICS_OS_NAME "Android"
-<<<<<<< HEAD
-#elif defined(OS_LINUX) || defined(OS_HAIKU)
-=======
-#elif defined(OS_LINUX) || defined(OS_CHROMEOS)
->>>>>>> master
+#elif defined(OS_LINUX) || defined(OS_CHROMEOS) || defined(OS_HAIKU)
 #define METRICS_OS_NAME "Linux"
 #elif defined(OS_FUCHSIA)
 #define METRICS_OS_NAME "Fuchsia"

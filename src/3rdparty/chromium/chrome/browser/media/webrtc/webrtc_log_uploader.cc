@@ -359,6 +359,8 @@ void WebRtcLogUploader::SetupMultipart(
   const char product[] = "Chrome_Android";
 #elif defined(OS_CHROMEOS)
   const char product[] = "Chrome_ChromeOS";
+#elif defined(OS_HAIKU)
+  const char product[] = "Chrome_Haiku";
 #else
 #error Platform not supported.
 #endif

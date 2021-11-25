@@ -7,11 +7,13 @@
 
 #include "base/files/file_util.h"
 
+#define PARENT_ID 3
+extern "C" pid_t _kern_process_info(pid_t, int);
+
 namespace base {
 
 ProcessId GetParentProcessId(ProcessHandle process) {
-  NOTIMPLEMENTED();
-  return -1;
+  return _kern_process_info(process, PARENT_ID);
 }
 
 FilePath GetProcessExecutablePath(ProcessHandle process) {

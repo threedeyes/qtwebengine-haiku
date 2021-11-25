@@ -360,10 +360,8 @@ std::vector<BrokerFilePermission> FilePermissionsForGpu(
   AddStandardGpuPermissions(&permissions);
   return permissions;
 }
-#endif
 
 void LoadArmGpuLibraries() {
-#if !defined(OS_HAIKU)
   // Preload the Mali library.
   if (UseChromecastSandboxAllowlist()) {
     for (const char* path : kAllowedChromecastPaths) {
@@ -378,7 +376,6 @@ void LoadArmGpuLibraries() {
     // Preload the Tegra V4L2 (video decode acceleration) library.
     dlopen(kLibTegraPath, dlopen_flag);
   }
-#endif
 }
 
 bool LoadAmdGpuLibraries() {
@@ -418,12 +415,14 @@ void LoadV4L2Libraries(
 }
 
 void LoadChromecastV4L2Libraries() {
+#if !defined(OS_HAIKU)
   for (const char* path : kAllowedChromecastPaths) {
     const std::string library_path(std::string(path) +
                                    std::string("libvpcodec.so"));
     if (dlopen(library_path.c_str(), dlopen_flag))
       break;
   }
+#endif
 }
 
 bool LoadLibrariesForGpu(
@@ -444,6 +443,7 @@ bool LoadLibrariesForGpu(
   }
   return true;
 }
+#endif
 
 sandbox::syscall_broker::BrokerCommandSet CommandSetForGPU(
     const sandbox::policy::SandboxLinux::Options& options) {

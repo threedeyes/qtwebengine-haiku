@@ -40,11 +40,6 @@
 #include "base/fuchsia/fuchsia_logging.h"
 #endif
 
-#if defined(OS_HAIKU)
-#define madvise posix_madvise
-#define MADV_DONTNEED POSIX_MADV_DONTNEED
-#endif
-
 #if BUILDFLAG(ENABLE_BASE_TRACING)
 #include "base/trace_event/memory_allocator_dump.h"  // no-presubmit-check
 #include "base/trace_event/process_memory_dump.h"    // no-presubmit-check

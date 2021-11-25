@@ -25,6 +25,7 @@
 #include "base/strings/string_split.h"
 #include "base/strings/string_tokenizer.h"
 #include "base/strings/string_util.h"
+#include "base/logging.h"
 #include "build/build_config.h"
 
 namespace base {

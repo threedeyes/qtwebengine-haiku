@@ -48,12 +48,13 @@ Optional<ThreadPriority> GetCurrentThreadPriorityForPlatform() {
 
 
 // static
-void PlatformThread::SetThreadPriority(PlatformThreadId thread_id,
+void PlatformThread::SetThreadPriority(PlatformThreadId process_id,
+                                       PlatformThreadId thread_id,
                                        ThreadPriority priority) {
   // Changing current main threads' priority is not permitted in favor of
   // security, this interface is restricted to change only non-main thread
   // priority.
-  CHECK_NE(thread_id, getpid());
+  CHECK_NE(thread_id, process_id);
 
   const int nice_setting = internal::ThreadPriorityToNiceValue(priority);
   if (setpriority(PRIO_PROCESS, thread_id, nice_setting)) {

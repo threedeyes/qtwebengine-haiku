@@ -137,8 +137,6 @@ jumbo_component("ozone_base") {
     "//ui/ozone/public/mojom",
   ]
   
-  all_dependent_configs = [ "//third_party/vulkan:vulkan_config" ]
-
   configs += [ "//third_party/khronos:khronos_headers" ]
 
   # Out of tree platforms can depend on this.
